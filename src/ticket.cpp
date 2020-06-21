@@ -201,7 +201,8 @@ bool CTicket::Invalid() const
 	return true;
 }
 
-CAmount CTicketView::BaseTicketPrice = 3000 * COIN;
+CAmount CTicketView::BaseTicketPrice = 14500 * COIN;
+CAmount nSlotLowerBoundTickerPrice = 1430 * COIN;
 static const char DB_TICKET_SYNCED_KEY = 'S';
 static const char DB_TICKET_SLOT_KEY = 'L';
 static const char DB_TICKET_ADDR_KEY = 'A';
@@ -322,8 +323,9 @@ CAmount CTicketView::TicketPriceInSlot(const int index)
             price *= 1.05;
         }
         else if (ticketsInSlot[i].size() < SlotLength()) {
-            price *= 0.95;
+            price = std::max(CAmount(price * 0.95), i * nSlotLowerBoundTickerPrice);
         }
+        price = std::max(BaseTicketPrice, price);
     }
     return price;
 }
@@ -337,10 +339,10 @@ void CTicketView::updateTicketPrice(const int height)
             ticketPrice *= 1.05;
         }
         else if (prevSlotTicketSize < len) {
-            ticketPrice *= 0.95;
+            ticketPrice = std::max(CAmount(ticketPrice * 0.95), slotIndex * nSlotLowerBoundTickerPrice);
         }
         slotIndex = int(height / len);
-        ticketPrice = std::max(ticketPrice, 1 * COIN);
+        ticketPrice = std::max(BaseTicketPrice, ticketPrice);
         LogPrint(BCLog::FIRESTONE, "%s: updata ticket slot, index:%d, price:%d, prevSlotTicketCount:%d\n", __func__, slotIndex, ticketPrice, prevSlotTicketSize);
     }
 }

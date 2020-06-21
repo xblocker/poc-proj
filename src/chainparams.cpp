@@ -17,15 +17,17 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint64_t nBaseTarget, int32_t nVersion, const CAmount& genesisReward)
+static CBlock CreateGenesisBlock(const char* pszTimestamp, const std::vector<CScript>& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint64_t nBaseTarget, int32_t nVersion, const std::vector<CAmount>& genesisReward)
 {
     CMutableTransaction txNew;
     txNew.nVersion = 2;
     txNew.vin.resize(1);
-    txNew.vout.resize(1);
+    txNew.vout.resize(2);
     txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-    txNew.vout[0].nValue = genesisReward;
-    txNew.vout[0].scriptPubKey = genesisOutputScript;
+    txNew.vout[0].nValue = genesisReward[0];
+    txNew.vout[0].scriptPubKey = genesisOutputScript[0];
+    txNew.vout[1].nValue = genesisReward[1];
+    txNew.vout[1].scriptPubKey = genesisOutputScript[1];
 
     CBlock genesis;
     genesis.nTime    = nTime;
@@ -49,9 +51,9 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  *     CTxOut(nValue=50.00000000, scriptPubKey=0x5F1DF16B2B704C8A578D0B)
  *   vMerkleTree: 4a5e1e
  */
-static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint64_t nBaseTarget, int32_t nVersion, const CScript& genesisOutputScript, const CAmount& genesisReward)
+static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint64_t nBaseTarget, int32_t nVersion, const std::vector<CScript>& genesisOutputScript, const std::vector<CAmount>& genesisReward)
 {
-    const char* pszTimestamp = "A Root-of-Trust and Top-level indexing for global storage.";
+    const char* pszTimestamp = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks";
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBaseTarget, nVersion, genesisReward);
 }
 
@@ -62,7 +64,7 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 260000;
+        consensus.nSubsidyHalvingInterval = 65700;
         consensus.BIP16Exception = uint256S("0xdc32ce556d0c3c08d1e770ca772cd2367b46c9b0f4151b276fbf0c7013c4ed0e");
         consensus.BIP34Height = 0;
         consensus.BIP34Hash = uint256S("0xdc32ce556d0c3c08d1e770ca772cd2367b46c9b0f4151b276fbf0c7013c4ed0e");
@@ -113,22 +115,19 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        std::vector<unsigned char> scriptData(ParseHex("76a91400f3ce606cf8a5fdebdcff65c6b059d66cd6cc1e88ac"));
-        const CScript genesisOutputScript = CScript(scriptData.begin(), scriptData.end());
-        auto genesisReward = 23296000 * COIN;
-        genesis = CreateGenesisBlock(1566964800, 2083236893, 18325193796L, 1, genesisOutputScript, genesisReward);
+        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
+        const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
+        genesis = CreateGenesisBlock(1592638195, 2083236893, 18325193796L, 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
         auto str = consensus.hashGenesisBlock.ToString();
-        assert(consensus.hashGenesisBlock == uint256S("0xdfc8e3d348da67cf64fef22c927e593860465ada0546fa1719556958b95c7cf6"));
-        assert(genesis.hashMerkleRoot == uint256S("0x0ba34c8de9be42563ebe6fb10bc687e4f19f19f6cb565cc75536afdc91e43d0b"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed1.lavatech.org");
-        vSeeds.emplace_back("seed2.lavatech.org");
-        vSeeds.emplace_back("seed1.lavaspv.org");
-        vSeeds.emplace_back("seed2.lavaspv.org");
 
         // Note that of those which support the service bits prefix, most only support a subset of
         // possible options.
@@ -151,9 +150,6 @@ public:
         fMineBlocksOnDemand = false;
 
         checkpointData = {
-            {
-                {15000, uint256S("fe69381fef372e387dbe3d3df67829eac6646d7af739d7b518a558f4123db81f")}, // 15000
-            }
         };
 
         chainTxData = ChainTxData{
@@ -177,7 +173,7 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 260000;
+        consensus.nSubsidyHalvingInterval = 65700;
         consensus.BIP16Exception = uint256S("0x62ca4ef31a124cedd557a97fd59f623ae7eff424a15a13304dd44ec2263a9b03");
         consensus.BIP34Height = 0;
         consensus.BIP34Hash = uint256S("0x62ca4ef31a124cedd557a97fd59f623ae7eff424a15a13304dd44ec2263a9b03");
@@ -220,13 +216,14 @@ public:
         m_assumed_blockchain_size = 30;
         m_assumed_chain_state_size = 2;
 
-        std::vector<unsigned char> scriptData(ParseHex("76a9141171f22512e85af9f6adbe69b562d32619693df888ac"));
-        const CScript genesisOutputScript = CScript(scriptData.begin(), scriptData.end());
-        auto genesisReward = 23296000 * COIN;
-        genesis = CreateGenesisBlock(1565259498, 414098458, 18325193796L, 1, genesisOutputScript, genesisReward);
+        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
+        const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
+        genesis = CreateGenesisBlock(1592638195, 414098458, 18325193796L, 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x54746281650914f19f4b4e80002c4a9b7ab6e2334b25d6e141bc9130ea4ec572"));
-        assert(genesis.hashMerkleRoot == uint256S("0x3adb98d48ff23bf6f75972faca104652538b38b8c343159aa88a223fa9e79029"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -315,14 +312,15 @@ public:
 
         UpdateVersionBitsParametersFromArgs(args);
 
-        std::vector<unsigned char> scriptData(ParseHex("76a9141171f22512e85af9f6adbe69b562d32619693df888ac"));
-        const CScript genesisOutputScript = CScript(scriptData.begin(), scriptData.end());
-        auto genesisReward = 23296000 * COIN;
-        genesis = CreateGenesisBlock(1565259498, 2, 18325193796L, 1, genesisOutputScript, genesisReward);
+        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
+        const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
+        genesis = CreateGenesisBlock(1592638195, 2, 18325193796L, 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
         auto str = consensus.hashGenesisBlock.ToString();
-        assert(consensus.hashGenesisBlock == uint256S("0x3b5660a9a053ba17e410fdbcde7944ea0705445c08d22fce1b061c1cf75730bc"));
-        assert(genesis.hashMerkleRoot == uint256S("0x3adb98d48ff23bf6f75972faca104652538b38b8c343159aa88a223fa9e79029"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
@@ -332,9 +330,6 @@ public:
         fMineBlocksOnDemand = true;
 
         checkpointData = {
-            {
-                {0, uint256S("ba24fc75e36a4d724c1a0d9db6a57b971e0b6d8aff8f1da2b00f0c14a505f367")},
-            }
         };
 
         chainTxData = ChainTxData{

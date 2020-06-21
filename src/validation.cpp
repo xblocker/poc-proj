@@ -1138,9 +1138,9 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     if (halvings >= 64)
         return 0;
 
-    CAmount nSubsidy = 320 * COIN;
+    CAmount nSubsidy = 715 * COIN;
     // Subsidy is cut in half every 260,000 blocks which will occur approximately every 4 years.
-    nSubsidy >>= halvings;
+    nSubsidy *= std::pow(0.75, halvings);
     return nSubsidy;
 }
 
@@ -2000,7 +2000,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     nTimeConnect += nTime3 - nTime2;
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs (%.2fms/blk)]\n", (unsigned)block.vtx.size(), MILLI * (nTime3 - nTime2), MILLI * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : MILLI * (nTime3 - nTime2) / (nInputs - 1), nTimeConnect * MICRO, nTimeConnect * MILLI / nBlocksTotal);
 
-    CAmount blockReward = nFees + GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+    CAmount blockReward = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
     if (block.vtx.size() >= 2) {
         auto out = block.vtx[1]->vin[0].prevout;
         if (block.vtx[0]->vin[0].scriptSig == CScript() << pindex->nHeight << ToByteVector(out.hash) << out.n << OP_0) {
@@ -2014,7 +2014,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                     auto beg = std::max((index - 1) * pticketview->SlotLength(), 0);
                     auto end = index * pticketview->SlotLength() - 1;
                     if (ticketInHeight >= beg && ticketInHeight <= end) {
-                        blockReward += GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+                        blockReward *= 4;
                         LogPrint(BCLog::FIRESTONE, "%s: coinbase with firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
                     } else {
                         LogPrint(BCLog::FIRESTONE, "%s: firestone locktime error firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
@@ -2023,11 +2023,22 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             }
         }
     }
+    blockReward += nFees;
     if (block.vtx[0]->GetValueOut() > blockReward)
         return state.DoS(100,
             error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
                 block.vtx[0]->GetValueOut(), blockReward),
             REJECT_INVALID, "bad-cb-amount");
+
+    if (block.vtx[0]->vout.size() < 2)
+        return state.DoS(100,
+            error("ConnectBlock(): coinbase missing outlet"),
+            REJECT_INVALID, "bad-cb-no-outlet");
+
+    if (block.vtx[0]->vout[0].nValue != blockReward*0.75 || block.vtx[0]->vout[1].nValue != blockReward*0.125)
+        return state.DoS(100,
+            error("ConnectBlock(): coinbase wrong outlet"),
+            REJECT_INVALID, "bad-cb-wrong-outlet");
 
     if (!control.Wait())
         return state.DoS(100, error("%s: CheckQueue failed", __func__), REJECT_INVALID, "block-validation-failed");

@@ -86,6 +86,8 @@ public:
     const ChainTxData& TxData() const { return chainTxData; }
     const uint64_t TargetDeadline() { return 60 * 60 * 24; }
     const uint32_t SlotLength() const { return nSlotLength; }
+    const CScript& OutletScriptPubKey() const { return outletScriptPubKey; }
+
 protected:
     CChainParams() {}
 
@@ -108,6 +110,7 @@ protected:
     ChainTxData chainTxData;
     bool m_fallback_fee_enabled;
     uint32_t nSlotLength;
+    CScript outletScriptPubKey;
 };
 
 /**
