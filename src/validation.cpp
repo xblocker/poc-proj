@@ -2000,7 +2000,8 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     nTimeConnect += nTime3 - nTime2;
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs (%.2fms/blk)]\n", (unsigned)block.vtx.size(), MILLI * (nTime3 - nTime2), MILLI * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : MILLI * (nTime3 - nTime2) / (nInputs - 1), nTimeConnect * MICRO, nTimeConnect * MILLI / nBlocksTotal);
 
-    CAmount blockReward = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+    CAmount subsidy = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+    CAmount blockReward = subsidy;
     if (block.vtx.size() >= 2) {
         auto out = block.vtx[1]->vin[0].prevout;
         if (block.vtx[0]->vin[0].scriptSig == CScript() << pindex->nHeight << ToByteVector(out.hash) << out.n << OP_0) {
@@ -2023,19 +2024,24 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             }
         }
     }
-    blockReward += nFees;
-    if (block.vtx[0]->GetValueOut() > blockReward)
+    int slotIndex = pindex->nHeight / chainparams.SlotLength();
+    if (slotIndex < 5)
+        blockReward = subsidy * 4;
+    CAmount nStakingAddtion = (subsidy * 4 - blockReward) * 0.75;
+    if (block.vtx[0]->GetValueOut() > blockReward + nStakingAddtion + nFees)
         return state.DoS(100,
             error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
-                block.vtx[0]->GetValueOut(), blockReward),
+                block.vtx[0]->GetValueOut(), blockReward + nFees),
             REJECT_INVALID, "bad-cb-amount");
 
-    if (block.vtx[0]->vout.size() < 2)
+    if (block.vtx[0]->vout.size() != 2)
         return state.DoS(100,
             error("ConnectBlock(): coinbase missing outlet"),
             REJECT_INVALID, "bad-cb-no-outlet");
 
-    if (block.vtx[0]->vout[0].nValue != blockReward*0.75 || block.vtx[0]->vout[1].nValue != blockReward*0.125)
+    CAmount nVout0 = slotIndex > 4 ? (blockReward * 0.75 + nFees) : (blockReward + nFees);
+    CAmount nVout1 = slotIndex > 4 ? (blockReward * 0.125) : 0;
+    if (block.vtx[0]->vout[0].nValue != nVout0 || block.vtx[0]->vout[1].nValue != nVout1)
         return state.DoS(100,
             error("ConnectBlock(): coinbase wrong outlet"),
             REJECT_INVALID, "bad-cb-wrong-outlet");

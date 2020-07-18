@@ -140,6 +140,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     coinbaseTx.vin[0].prevout.SetNull();
     coinbaseTx.vout.resize(2);
 
+    int slotIndex = height / chainparams.SlotLength();
     CAmount subsidy = GetBlockSubsidy(nHeight, chainparams.GetConsensus());
     if (!tx->IsNull()) {
         auto out = tx->vin[0].prevout;
@@ -147,15 +148,16 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
         subsidy *= 4;
         LogPrint(BCLog::FIRESTONE, "%s: firestone spend in height:%d, %s:%d, tx:%s/n", __func__, nHeight, out.hash.ToString(), out.n, tx->GetHash().ToString());
     } else {
+        if (slotIndex < 5)
+            subsidy *= 4;
         coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
     }
-    subsidy += nFees;
 
     coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
-    coinbaseTx.vout[0].nValue = subsidy * 0.75;
+    coinbaseTx.vout[0].nValue = slotIndex > 4 ? (subsidy * 0.75 + nFees) : (subsidy  + nFees);
 
     coinbaseTx.vout[1].scriptPubKey = chainparams.OutletScriptPubKey();  
-    coinbaseTx.vout[1].nValue = subsidy * 0.125;
+    coinbaseTx.vout[1].nValue = slotIndex > 4 ? (subsidy * 0.125) : 0;
 
     pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
     pblocktemplate->vTxFees[0] = -nFees;
