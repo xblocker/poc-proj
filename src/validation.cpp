@@ -2081,10 +2081,9 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         CTxDestination dest;
         ExtractDestination(script, dest);
         auto coinbaseDest = boost::get<CKeyID>(dest);
-        auto to = prelationview->To(block.nPlotID);
-        auto targetPlotid = to.IsNull() ? block.nPlotID : to.GetPlotID();
-        if (targetPlotid != coinbaseDest.GetPlotID()) {
-            return state.DoS(100, false, REJECT_INVALID, "bad-coinbase-plotid", false, "coinbase public key error plot id");
+        auto target = prelationview->To(block.nPlotID);
+        if (target != coinbaseDest) {
+            return state.DoS(100, false, REJECT_INVALID, "bad-coinbase-plotid", false, "plotid not bind to coinbase scriptPubKey");
         }
     }
 

@@ -16,7 +16,7 @@ CPOCBlockAssember::CPOCBlockAssember()
     SetNull();
 }
 
-bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& keyid, const uint64_t nonce, const uint64_t deadline, const CKey& key)
+bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& gen_to, const uint64_t plot_id, const uint64_t nonce, uint64_t& deadline, const CKey& key)
 {
     auto prevIndex = chainActive.Tip();
     if (prevIndex->nHeight != (height - 1)) {
@@ -24,6 +24,10 @@ bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& keyid, co
         return false;
     }
     auto params = Params();
+
+    auto generationSignature = CalcGenerationSignature(prevIndex->genSign, prevIndex->nPlotID);
+    deadline = CalcDeadline(generationSignature, height, plot_id, nonce);
+    
     if (deadline / prevIndex->nBaseTarget > params.TargetDeadline()) {
         LogPrintf("Invalid deadline %uul\n", deadline);
         return false;
@@ -33,20 +37,14 @@ bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& keyid, co
         LogPrintf("Invalid deadline %uul\n", deadline);
         return false;
     }
-
-    auto plotID = keyid.GetPlotID();
-    auto generationSignature = CalcGenerationSignature(prevIndex->genSign, prevIndex->nPlotID);
-    if (CalcDeadline(generationSignature, height, plotID, nonce) != deadline) {
-        LogPrintf("Deadline inconformity %uul\n", deadline);
-        return false;
-    }
     auto ts = (deadline / prevIndex->nBaseTarget);
     LogPrintf("Update new deadline: %u, now: %u, target: %u\n", ts, GetTimeMillis() / 1000, prevIndex->nTime + ts);
 
     {
         boost::lock_guard<boost::mutex> lock(mtx);
         this->height = height;
-        this->keyid = keyid;
+        this->gento = gen_to;
+        this->plotId = plot_id;
         this->genSig = genSig;
         this->nonce = nonce;
         this->deadline = deadline;
@@ -61,25 +59,25 @@ bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& keyid, co
 void CPOCBlockAssember::CreateNewBlock()
 {
     int height{ 0 };
-    CKeyID from;
+    CKey key;
+    CKeyID target;
     uint256 genSig;
     uint64_t deadline{ 0 };
     uint64_t nonce{ 0 };
+    uint64_t plotid;
     {
         boost::lock_guard<boost::mutex> lock(mtx);
         height = this->height;
-        from = this->keyid;
+        key = this->key;
+        target = this->gento;
+        plotid = this->plotId;
         genSig = this->genSig;
         nonce = this->nonce;
         deadline = this->deadline;
     }
     
-    auto plotid = from.GetPlotID();
     LogPrintf("CPOCBlockAssember CreateNewBlock, plotid: %u nonce:%u newheight:%u deadline:%u utc:%u\n", plotid, nonce, height, deadline, GetTimeMillis()/1000);
     auto params = Params();
-    //plotid bind
-    auto to = prelationview->To(from);
-    auto target = to.IsNull() ? from : to;
     auto fstx = MakeTransactionRef();
 
     //find firestone for coinbase
@@ -155,7 +153,8 @@ void CPOCBlockAssember::SetNull()
     nonce = 0;
     deadline = 0;
     genSig = uint256();
-    keyid.SetNull();
+    gento.SetNull();
+    plotId = 0;
     dl = 0;
     //firestoneKey = CKey();
     //key = CKey();

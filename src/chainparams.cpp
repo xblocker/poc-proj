@@ -95,7 +95,7 @@ public:
         // The best chain should have at least this much work.
         // TODO: better cumulative diff?
         // minimumCumulativeDiff = initialCumulativeDiff + 1
-        consensus.nMinimumCumulativeDiff = uint256S("0x000000000000000000000000000000000000000000000001000000004b000000");
+        consensus.nMinimumCumulativeDiff = uint256S("0x000000000000000000000000000000000000000000000001000000003bffffff");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000000000f1c54590ee18d15ec70e68c8cd4cfbadb1b4f11697eee"); //563378
@@ -201,7 +201,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumCumulativeDiff = uint256S("0x000000000000000000000000000000000000000000000001000000004b000000");
+        consensus.nMinimumCumulativeDiff = uint256S("0x000000000000000000000000000000000000000000000001000000003bffffff");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75"); //1354312

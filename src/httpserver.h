@@ -5,6 +5,7 @@
 #ifndef BITCOIN_HTTPSERVER_H
 #define BITCOIN_HTTPSERVER_H
 
+#include <map>
 #include <string>
 #include <stdint.h>
 #include <functional>
@@ -90,6 +91,12 @@ public:
      */
     std::pair<bool, std::string> GetHeader(const std::string& hdr) const;
 
+    /**
+     * Get the request query parameters.
+     * Return a map (name,value).
+     */
+    std::map<std::string, std::string> GetParameters();
+    
     /**
      * Read request body.
      *

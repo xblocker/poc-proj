@@ -276,6 +276,7 @@ libbitcoin_server_a_SOURCES = \
   rpc/server.cpp \
   rpc/util.cpp \
   rpc/poc.cpp \
+  rpc/passphrase-en.cpp \
   script/sigcache.cpp \
   shutdown.cpp \
   timedata.cpp \
@@ -338,6 +339,10 @@ crypto_libbitcoin_crypto_base_a_CPPFLAGS = $(AM_CPPFLAGS)
 crypto_libbitcoin_crypto_base_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 crypto_libbitcoin_crypto_base_a_CFLAGS = -fPIC
 crypto_libbitcoin_crypto_base_a_SOURCES = \
+  crypto/curve/curve25519_i64.h \
+  crypto/curve/curve25519_i64.cpp \
+  crypto/curve25519.h \
+  crypto/curve25519.cpp \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/chacha20.h \

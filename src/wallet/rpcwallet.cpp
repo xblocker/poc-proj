@@ -285,7 +285,6 @@ static UniValue getmineraddress(const JSONRPCRequest& request)
 
             UniValue obj(UniValue::VOBJ);
             obj.pushKV("address", EncodeDestination(dest));
-            obj.pushKV("plotid", pubkey.GetID().GetPlotID());
             return obj;
         } else {
             UniValue obj(UniValue::VOBJ);
@@ -310,7 +309,6 @@ static UniValue getmineraddress(const JSONRPCRequest& request)
 
         UniValue obj(UniValue::VOBJ);
         obj.pushKV("address", EncodeDestination(dest));
-        obj.pushKV("plotid", newKey.GetID().GetPlotID());
         return obj;
     }
 }
@@ -5333,42 +5331,37 @@ static UniValue bindplotid(const JSONRPCRequest& request)
         throw std::runtime_error(
             RPCHelpMan{
                 "bindplotid",
-                "\nbind plotid to another address.",
+                "\nbind plotid to mining address.",
                 {
-                    {"from", RPCArg::Type::STR, RPCArg::Optional::NO, "address"},
-                    {"to", RPCArg::Type::STR, RPCArg::Optional::NO, "target"},
+                    {"passphrase", RPCArg::Type::STR, RPCArg::Optional::NO, "your passphrase"},
+                    {"plotid", RPCArg::Type::STR, RPCArg::Optional::NO, "your plotid"},
+                    {"target", RPCArg::Type::STR, RPCArg::Optional::NO, "bind target"},
                 },
                 RPCResult{
                     "\"txid\"                  (string) The transaction id.\n"
                 },
                 RPCExamples{
-                    HelpExampleCli("bindplotid", "17VkcJoDJEHyuCKgGyky8CGNnb1kPgbwr4 1QEWDafENaWingtsSGtnc3M2fiQVuEkZHi")
+                    HelpExampleCli("bindplotid", "\"level dig away obviously whole school bag shatter join confusion driver foul\" 4608248319413296905 115UBsnjcaVEX95ud3NJBy2XLpbL2dtCev")
                 },
             }.ToString()
         );
     }
-    LOCK(pwallet->cs_wallet);
-    EnsureWalletIsUnlocked(pwallet);
-    auto checkAddress = [](std::string str) ->bool {
-        CTxDestination dest = DecodeDestination(str);
-        return IsValidDestination(dest) && dest.type() == typeid(CKeyID);
-    };
-    if (!checkAddress(request.params[0].get_str()) || !checkAddress(request.params[1].get_str())) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
+    auto passphrase = request.params[0].get_str();
+    uint64_t plotID = poc::GeneratePlotId(passphrase);
+    if (std::to_string(plotID) != request.params[1].get_str()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "passphrase and plotid mismatch");
     }
-    std::string strAddress = request.params[0].get_str();
-    CTxDestination dest = DecodeDestination(strAddress);
-    auto from = GetKeyForDestination(*pwallet, dest);
-    if (from.IsNull()) {
-        throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
-    }
-    auto to = boost::get<CKeyID>(DecodeDestination(request.params[1].get_str()));
-    auto action = MakeBindAction(from, to);
-    CKey key;
-    if (!pwallet->GetKey(from, key)) {
-        throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
+
+    CTxDestination dest = DecodeDestination(request.params[2].get_str());
+    if (!IsValidDestination(dest) || dest.type() != typeid(CKeyID)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid target address");
     }
     
+    auto from   = CKeyID(plotID);
+    auto target = boost::get<CKeyID>(dest);
+    auto action = MakeBindAction(from, target);
+    CKey key;
+    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
     auto txid = SendAction(pwallet, action, key, CTxDestination(from));
     return txid.GetHex();
 }
@@ -5386,33 +5379,27 @@ static UniValue unbindplotid(const JSONRPCRequest& request)
                 "unbindplotid",
                 "\nunbind plotid mapping.",
                 {
-                    {"from", RPCArg::Type::STR, RPCArg::Optional::NO, "address"},
+                    {"passphrase", RPCArg::Type::STR, RPCArg::Optional::NO, "your passphrase"},
+                    {"plotid", RPCArg::Type::STR, RPCArg::Optional::NO, "your plotid"},
                 },
                 RPCResult{
                     "\"txid\"                  (string) The transaction id.\n"
                     },
                 RPCExamples{
-                    HelpExampleCli("unbindplotid", "17VkcJoDJEHyuCKgGyky8CGNnb1kPgbwr4")
+                    HelpExampleCli("unbindplotid", "\"level dig away obviously whole school bag shatter join confusion driver foul\" 4608248319413296905")
                 },
             }.ToString()
         );
     }
-    LOCK(pwallet->cs_wallet);
-    EnsureWalletIsUnlocked(pwallet);
-    auto strAddress = request.params[0].get_str();
-    CTxDestination dest = DecodeDestination(strAddress);
-    if (!IsValidDestination(dest) || dest.type() != typeid(CKeyID)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
+    auto passphrase = request.params[0].get_str();
+    uint64_t plotID = poc::GeneratePlotId(passphrase);
+    if (std::to_string(plotID) != request.params[1].get_str()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "passphrase and plotid mismatch");
     }
-    auto from = GetKeyForDestination(*pwallet, dest);
-    if (from.IsNull()) {
-        throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
-    }
+    auto from   = CKeyID(plotID);
     auto action = CAction(CUnbindAction(from));
     CKey key;
-    if (!pwallet->GetKey(from, key)) {
-        throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
-    }
+    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
     auto txid = SendAction(pwallet, action, key, CTxDestination(from));
     return txid.GetHex();
 }

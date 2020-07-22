@@ -13,6 +13,7 @@
 #include "util/strencodings.h"
 #include "wallet/coincontrol.h"
 #include "wallet/wallet.h"
+#include "passphrase.h"
 
 #include <algorithm>
 #include <queue>
@@ -22,49 +23,49 @@
 #include <net.h>
 #include <validation.h>
 
-UniValue getAddressPlotId(const JSONRPCRequest& request)
+static UniValue getPlotId(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 1) {
+    if (request.fHelp) {
         throw std::runtime_error(
             RPCHelpMan{
-                "getaddressplotid",
-                "\nReturns a plot id.",
-                {{"address", RPCArg::Type::STR, RPCArg::Optional::NO, "Your miner address"}},
+                "getplotid",
+                "\nGet potter id from passphrase or Generate New One.\n"
+                "\nIMPORTANT!!!Save and keep your passphrase secret.\n",
+                {{"passphrase", RPCArg::Type::STR, RPCArg::Optional::OMITTED, "The string of the passphrase"}},
                 RPCResult{
                     "{\n"
+                    "  \"passphrase\": xxx, (string) The passphrase\n",
                     "  \"plotid\": nnn, (numeric) The plot id\n"
                     "}\n"},
                 RPCExamples{
-                    HelpExampleCli("getaddressplotid", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\"") + HelpExampleRpc("getaddressplotid", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX\"")},
+                    HelpExampleCli("getPlotId", "")},
             }
                 .ToString());
     }
-
-    std::vector<std::shared_ptr<CWallet>> wallets = GetWallets();
-    auto wallet = wallets.size() == 1 || (request.fHelp && wallets.size() > 0) ? wallets[0] : nullptr;
-    if (wallet == nullptr) {
-        return NullUniValue;
-    }
-    CWallet* const pwallet = wallet.get();
-    auto locked_chain = pwallet->chain().lock();
-    LOCK(pwallet->cs_wallet);
-    if (pwallet->IsLocked()) {
-        throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
-    }
-    LOCK(cs_main);
-    std::string strAddress = request.params[0].get_str();
-    CTxDestination dest = DecodeDestination(strAddress);
-    if (!IsValidDestination(dest)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Bitcoin address");
-    }
-    auto keyid = GetKeyForDestination(*pwallet, dest);
-    if (keyid.IsNull()) {
-        throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
+    std::string passphrase;
+    if (request.params.size() > 0) {
+        passphrase = request.params[0].get_str();
+    } else {
+        passphrase = poc::generatePassphrase();
     }
 
-    UniValue obj(UniValue::VOBJ);
-    obj.pushKV("plotid", keyid.GetPlotID());
-    return obj;
+    CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
+    ss << passphrase;
+    std::vector<unsigned char> vchSig;
+    CKey key;
+    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
+    if (!key.SignCompact(ss.GetHash(), vchSig)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, Can't sign bindings");
+    }
+    CPubKey pubkey;
+    if (!pubkey.RecoverCompact(ss.GetHash(), vchSig))
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, Can't verify bindings");
+
+    uint64_t plotID = poc::GeneratePlotId(passphrase);
+    UniValue result(UniValue::VOBJ);
+    result.pushKV("passphrase", passphrase);
+    result.pushKV("plotid", std::to_string(plotID));
+    return result;
 }
 
 UniValue getMiningInfo(const JSONRPCRequest& request)
@@ -107,25 +108,54 @@ UniValue getMiningInfo(const JSONRPCRequest& request)
 
 UniValue submitNonce(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 4) {
+    if (request.fHelp || request.params.size() < 2 || request.params.size() > 5) {
         throw std::runtime_error(
-            RPCHelpMan{
-                "submitnonce",
-                "\nSubmit the nonce form disk.",
-                {{"address", RPCArg::Type::STR, RPCArg::Optional::NO, "Your miner address"},
-                    {"nonce", RPCArg::Type::STR, RPCArg::Optional::NO, "The nonce you found on disk"},
-                    {"deadline", RPCArg::Type::NUM, RPCArg::Optional::NO, "When the next block will be generate"},
-                    {"height", RPCArg::Type::NUM, RPCArg::Optional::NO, "The block height you want to mine"},},
-                RPCResult{
-                    "{\n"
-                    "  \"accetped\": ture or false\n"
-                    "  \"deadline\": \"nnn\"\n"
-                    "}\n"},
-                RPCExamples{
-                    HelpExampleCli("submitnonce", "\"3MhzFQAXQMsmtTmdkciLE3EJsgAQkzR4Sg\" 15032170525642997731 6170762982435 100") + HelpExampleRpc("submitnonce", "\"3MhzFQAXQMsmtTmdkciLE3EJsgAQkzR4Sg\", 15032170525642997731, 6170762982435 100")},
-            }
-                .ToString());
+            "submitNonce \"nonce\" \"plotterId\" (height \"address\" checkBind)\n"
+            "\nSubmit mining nonce.\n"
+            "\nArguments:\n"
+            "1. \"nonce\"           (string, required) Nonce\n"
+            "2. \"plotterId\"       (string, required) Plotter ID\n"
+            "3. \"height\"          (integer, optional) Target height for mining\n"
+            "4. \"address\"         (string, optional) Target address or private key (BHDIP007) for mining\n"
+            "5. \"checkBind\"       (boolean, optional, true) Check bind for BHDIP006\n"
+            "\nResult:\n"
+            "{\n"
+            "  [ result ]                  (string) Submit result: 'success' or others \n"
+            "  [ deadline ]                (integer, optional) Current block generation signature\n"
+            "  [ height ]                  (integer, optional) Target block height\n"
+            "  [ targetDeadline ]          (number) Current acceptable deadline \n"
+            "}\n"
+        );
     }
+    
+    /*if (IsInitialBlockDownload()) {
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Cannot Submit Nonce In Initial Block Download");
+    }*/
+
+    int height = 0;
+    {
+        LOCK(cs_main);
+        height = chainActive.Height() + 1;
+    }
+    uint64_t nNonce = static_cast<uint64_t>(std::stoull(request.params[0].get_str()));
+    uint64_t nPlotterId = static_cast<uint64_t>(std::stoull(request.params[1].get_str()));
+    
+    CKeyID generateTo;
+    if (request.params.size() >= 4) {
+        std::string strAddress = request.params[3].get_str();
+        CTxDestination dest = DecodeDestination(strAddress);
+        if (!IsValidDestination(dest) && dest.type() != typeid(CKeyID)) {
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Bitcoin address");
+        }
+        generateTo = boost::get<CKeyID>(dest);
+    }
+    if (generateTo.IsNull()) {
+        generateTo = prelationview->To(nPlotterId);
+    }
+    if (generateTo.IsNull()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "PlotID not bind to any address");
+    }
+
     std::vector<std::shared_ptr<CWallet>> wallets = GetWallets();
     auto wallet = wallets.size() == 1 || (request.fHelp && wallets.size() > 0) ? wallets[0] : nullptr;
     if (wallet == nullptr) {
@@ -134,33 +164,23 @@ UniValue submitNonce(const JSONRPCRequest& request)
     CWallet* const pwallet = wallet.get();
     auto locked_chain = pwallet->chain().lock();
 
-    std::string strAddress = request.params[0].get_str();
-    CTxDestination dest = DecodeDestination(strAddress);
-    if (!IsValidDestination(dest) && dest.type() != typeid(CKeyID)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Bitcoin address");
-    }
-    auto keyid = boost::get<CKeyID>(dest);
-    auto plotID = boost::get<CKeyID>(dest).GetPlotID();
-    uint64_t nonce = 0;
-    auto nonceStr = request.params[1].get_str();
-    if (!ParseUInt64(nonceStr, &nonce)) {
-        throw JSONRPCError(RPC_TYPE_ERROR, "Invalid nonce");
-    }
-    uint64_t deadline = request.params[2].get_int64();
-    int height = request.params[3].get_int();
     CKey key;
     LOCK(pwallet->cs_wallet);
     if (!pwallet->IsLocked()) {
-        pwallet->GetKey(keyid, key);
+        pwallet->GetKey(generateTo, key);
     }
     UniValue obj(UniValue::VOBJ);
-    if (blockAssember.UpdateDeadline(height, keyid, nonce, deadline, key)) {
-        obj.pushKV("plotid", plotID);
-        obj.pushKV("deadline", deadline);
+    uint64_t nDeadline;
+    if (blockAssember.UpdateDeadline(height, generateTo, nPlotterId, nNonce, nDeadline, key)) {
+        obj.pushKV("result", "success");
+        obj.pushKV("deadline", nDeadline);
+        obj.pushKV("height", height);
         auto params = Params();
         obj.pushKV("targetdeadline", params.TargetDeadline());
     } else {
-        obj.pushKV("accept", false);
+        obj.pushKV("result", "error");
+        obj.pushKV("errorCode", "400");
+        obj.pushKV("errorDescription", "bad nonce/deadline");
     }
     return obj;
 }
@@ -252,11 +272,13 @@ UniValue setfsowner(const JSONRPCRequest& request){
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-    { "poc",               "getmininginfo",           &getMiningInfo,          {} },
-    { "poc",               "submitnonce",             &submitNonce,            {"address", "nonce", "deadline"} },
-	{ "poc",               "getaddressplotid",        &getAddressPlotId,       {"address"} },
-    { "poc",               "getslotinfo",             &getslotinfo,            {"index"} },
-    { "wallet",            "setfsowner",             &setfsowner,            {"address"} },    
+    { "hidden",            "getMiningInfo",            &getMiningInfo,          {} },
+    { "poc",               "getmininginfo",            &getMiningInfo,          {} },
+    { "hidden",            "submitNonce",              &submitNonce,            {"nonce", "plotterId", "height", "address", "checkBind"} },
+    { "poc",               "submitnonce",              &submitNonce,            {"nonce", "plotterId", "height", "address", "checkBind"} },
+	{ "poc",               "getplotid",                &getPlotId,              {"passphrase"} },
+    { "poc",               "getslotinfo",              &getslotinfo,            {"index"} },
+    { "wallet",            "setfsowner",               &setfsowner,             {"address"} },    
 };
 
 void RegisterPocRPCCommands(CRPCTable& t)

@@ -140,7 +140,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     coinbaseTx.vin[0].prevout.SetNull();
     coinbaseTx.vout.resize(2);
 
-    int slotIndex = height / chainparams.SlotLength();
+    int slotIndex = nHeight / chainparams.SlotLength();
     CAmount subsidy = GetBlockSubsidy(nHeight, chainparams.GetConsensus());
     if (!tx->IsNull()) {
         auto out = tx->vin[0].prevout;

@@ -13,7 +13,7 @@ public:
 
     ~CPOCBlockAssember() = default;
 
-    bool UpdateDeadline(const int height, const CKeyID& keyid, const uint64_t nonce, const uint64_t deadline, const CKey& key);
+    bool UpdateDeadline(const int height, const CKeyID& gen_to, const uint64_t plot_id, const uint64_t nonce, uint64_t& deadline, const CKey& key);
 
     void CreateNewBlock();
 
@@ -26,7 +26,8 @@ public:
 private:
     uint256       genSig;
     int           height;
-    CKeyID        keyid;
+    CKeyID        gento;
+    uint64_t      plotId;
     uint64_t      nonce;
     uint64_t      deadline;
     uint64_t      dl;
