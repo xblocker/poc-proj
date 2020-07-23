@@ -115,9 +115,9 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData1(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
+        std::vector<unsigned char> scriptData2(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
+        std::vector<unsigned char> scriptData3(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};

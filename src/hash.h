@@ -210,9 +210,6 @@ namespace poc {
 uint64_t GeneratePlotId(const std::string &passphrase);
 uint64_t ToPlotId(const unsigned char publicKey[32]);
 
-bool Sign(const std::string &passphrase, const unsigned char data[32], unsigned char signature[64], unsigned char publicKey[32]);
-bool Verify(const unsigned char publicKey[32], const unsigned char data[32], const unsigned char signature[64]);
-
 }
 
 #endif // BITCOIN_HASH_H

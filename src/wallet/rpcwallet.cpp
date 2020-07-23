@@ -5327,7 +5327,7 @@ static UniValue bindplotid(const JSONRPCRequest& request)
     if (!EnsureWalletIsAvailable(pwallet, request.fHelp)) {
         return NullUniValue;
     }
-    if (request.fHelp || request.params.size() != 2) {
+    if (request.fHelp || request.params.size() != 3) {
         throw std::runtime_error(
             RPCHelpMan{
                 "bindplotid",
@@ -5361,7 +5361,11 @@ static UniValue bindplotid(const JSONRPCRequest& request)
     auto target = boost::get<CKeyID>(dest);
     auto action = MakeBindAction(from, target);
     CKey key;
-    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
+    unsigned char hash[32];
+    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize(hash);
+    key.Set(hash, hash+32, true);
+    if (!key.IsValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, not a valid private key seed");
     auto txid = SendAction(pwallet, action, key, CTxDestination(from));
     return txid.GetHex();
 }
@@ -5373,7 +5377,7 @@ static UniValue unbindplotid(const JSONRPCRequest& request)
     if (!EnsureWalletIsAvailable(pwallet, request.fHelp)) {
         return NullUniValue;
     }
-    if (request.fHelp || request.params.size() != 1) {
+    if (request.fHelp || request.params.size() != 2) {
         throw std::runtime_error(
             RPCHelpMan{
                 "unbindplotid",
@@ -5399,7 +5403,11 @@ static UniValue unbindplotid(const JSONRPCRequest& request)
     auto from   = CKeyID(plotID);
     auto action = CAction(CUnbindAction(from));
     CKey key;
-    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
+    unsigned char hash[32];
+    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize(hash);
+    key.Set(hash, hash+32, true);
+    if (!key.IsValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, not a valid private key seed");
     auto txid = SendAction(pwallet, action, key, CTxDestination(from));
     return txid.GetHex();
 }

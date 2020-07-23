@@ -105,30 +105,3 @@ uint64_t poc::ToPlotId(const unsigned char publicKey[32])
         ((uint64_t)publicKeyHash[6]) << 48 | \
         ((uint64_t)publicKeyHash[7]) << 56;
 }
-
-bool poc::Sign(const std::string &passphrase, const unsigned char data[32], unsigned char signature[64], unsigned char publicKey[32])
-{
-    uint8_t privateKey[32] = {0}, signingKey[32] = {0};
-    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize(privateKey);
-    crypto::curve25519_kengen(publicKey, signingKey, privateKey);
-
-    unsigned char x[32], Y[32], h[32], v[32];
-    CSHA256().Write(data, 32).Write(signingKey, 32).Finalize(x); // digest(m + s) => x
-    crypto::curve25519_kengen(Y, NULL, x); // keygen(Y, NULL, x) => Y
-    CSHA256().Write(data, 32).Write(Y, 32).Finalize(h); // digest(m + Y) => h
-    int r = crypto::curve25519_sign(v, h, x, signingKey); // sign(v, h, x, s)
-    if (r == 1) {
-        memcpy(signature, v, 32);
-        memcpy(signature + 32, h, 32);
-        return true;
-    } else
-        return false;
-}
-
-bool poc::Verify(const unsigned char publicKey[32], const unsigned char data[32], const unsigned char signature[64])
-{
-    unsigned char Y[32], h[32];
-    crypto::curve25519_verify(Y, signature, signature + 32, publicKey); // verify25519(Y, signature, signature + 32, P) => Y
-    CSHA256().Write(data, 32).Write(Y, 32).Finalize(h); // digest(m + Y) => h
-    return memcmp(h, signature + 32, 32) == 0;
-}

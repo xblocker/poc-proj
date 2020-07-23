@@ -21,16 +21,23 @@ class CKeyID : public uint160
 {
 public:
     CKeyID() : uint160() {}
+    CKeyID(uint64_t v) : uint160() {
+        *((uint64_t*)data) = v;
+    }
     explicit CKeyID(const uint160& in) : uint160(in) {}
+
+    CKeyID& operator=(uint64_t v) {
+        *((uint64_t*)data) = v;
+        return *this;
+    }
+
+    operator uint64_t() {
+        return *((uint64_t*)data);
+    }
 
     uint64_t GetPlotID() const
     {
-        uint64_t result = 0;
-        for (int i = 0; i < 8; i++) {
-            result <<= 8;
-            result |= (data[7 - i] & 0xFF);
-        }
-        return result;
+        return *((uint64_t*)data);
     }
 };
 

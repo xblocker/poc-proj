@@ -14,6 +14,8 @@
 #include "wallet/coincontrol.h"
 #include "wallet/wallet.h"
 #include "passphrase.h"
+#include <key.h>
+#include <crypto/curve25519.h>
 
 #include <algorithm>
 #include <queue>
@@ -48,19 +50,6 @@ static UniValue getPlotId(const JSONRPCRequest& request)
     } else {
         passphrase = poc::generatePassphrase();
     }
-
-    CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-    ss << passphrase;
-    std::vector<unsigned char> vchSig;
-    CKey key;
-    CSHA256().Write((const unsigned char*)passphrase.data(), (size_t)passphrase.length()).Finalize((unsigned char*)key.begin());
-    if (!key.SignCompact(ss.GetHash(), vchSig)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, Can't sign bindings");
-    }
-    CPubKey pubkey;
-    if (!pubkey.RecoverCompact(ss.GetHash(), vchSig))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid passphrase, Can't verify bindings");
-
     uint64_t plotID = poc::GeneratePlotId(passphrase);
     UniValue result(UniValue::VOBJ);
     result.pushKV("passphrase", passphrase);

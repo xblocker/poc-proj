@@ -2,6 +2,7 @@
 #include <validation.h>
 #include <chainparams.h>
 #include <logging.h>
+#include <crypto/curve25519.h>
 
 CAction MakeBindAction(const CKeyID& from, const CKeyID& to)
 {
@@ -9,35 +10,72 @@ CAction MakeBindAction(const CKeyID& from, const CKeyID& to)
     return std::move(CAction(ba));
 }
 
+static bool Sign(unsigned char privateKey[32], const unsigned char data[32], unsigned char signature[64], unsigned char publicKey[32])
+{
+    uint8_t signingKey[32] = {0};
+    crypto::curve25519_kengen(publicKey, signingKey, privateKey);
+
+    unsigned char x[32], Y[32], h[32], v[32];
+    CSHA256().Write(data, 32).Write(signingKey, 32).Finalize(x); // digest(m + s) => x
+    crypto::curve25519_kengen(Y, NULL, x); // keygen(Y, NULL, x) => Y
+    CSHA256().Write(data, 32).Write(Y, 32).Finalize(h); // digest(m + Y) => h
+    int r = crypto::curve25519_sign(v, h, x, signingKey); // sign(v, h, x, s)
+    if (r == 1) {
+        memcpy(signature, v, 32);
+        memcpy(signature + 32, h, 32);
+        return true;
+    } else
+        return false;
+}
+
 bool SignAction(const COutPoint out, const CAction &action, const CKey& key, std::vector<unsigned char>& vch)
 {
-    vch.clear();
+    std::vector<unsigned char> vchSig(64);
+    std::vector<unsigned char> vchPubkey(32);
     auto actionVch = SerializeAction(action);
+    
+    vch.clear();
     vch.insert(vch.end(), actionVch.begin(), actionVch.end());
+
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     ss << actionVch << out;
-    std::vector<unsigned char> vchSig;
-    if (!key.SignCompact(ss.GetHash(), vchSig)) {
+    auto hash = ss.GetHash();
+
+    if(!Sign((unsigned char*)key.begin(), hash.begin(), vchSig.data(), vchPubkey.data()))
         return false;
-    }
+    vch.insert(vch.end(), vchPubkey.begin(), vchPubkey.end());
     vch.insert(vch.end(), vchSig.begin(), vchSig.end());
     return true;
+}
+
+static bool Verify(const unsigned char publicKey[32], const unsigned char data[32], const unsigned char signature[64])
+{
+    unsigned char Y[32], h[32];
+    crypto::curve25519_verify(Y, signature, signature + 32, publicKey); // verify25519(Y, signature, signature + 32, P) => Y
+    CSHA256().Write(data, 32).Write(Y, 32).Finalize(h); // digest(m + Y) => h
+    return memcmp(h, signature + 32, 32) == 0;
 }
 
 bool VerifyAction(const COutPoint out, const CAction& action, std::vector<unsigned char>& vchSig)
 {
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     ss << SerializeAction(action) << out;
-    CPubKey pubkey;
-    if (!pubkey.RecoverCompact(ss.GetHash(), vchSig))
+
+    const unsigned char* publicKey = vchSig.data();
+    const unsigned char* signature = vchSig.data() + 32;
+    auto hash = ss.GetHash();
+    const unsigned char* data = hash.begin();
+    
+    if (!Verify(publicKey, data, signature))
         return false;
+
     auto result{ false };
     if (action.type() == typeid(CBindAction)) {
         auto from = boost::get<CBindAction>(action).first;
-        result = from == pubkey.GetID();
+        result = from.GetPlotID() == poc::ToPlotId(publicKey);
     } else if (action.type() == typeid(CUnbindAction)) {
         auto from = boost::get<CUnbindAction>(action);
-        result = from == pubkey.GetID();
+        result = from.GetPlotID() == poc::ToPlotId(publicKey);
     }
     return result;
 }
@@ -98,9 +136,9 @@ CAction DecodeAction(const CTransactionRef tx, std::vector<unsigned char>& vchSi
             }
             script.GetOp(pc, opcodeRet, vchRet);
             auto action = UnserializeAction(vchRet);
-            if (vchRet.size() < 65) continue;
+            if (vchRet.size() < (64+32)) continue;
             vchSig.clear();
-            vchSig.insert(vchSig.end(), vchRet.end() - 65, vchRet.end());
+            vchSig.insert(vchSig.end(), vchRet.end() - (64+32), vchRet.end());
             return std::move(action);
         }
     } while (false);
