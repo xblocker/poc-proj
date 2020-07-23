@@ -5287,7 +5287,6 @@ uint256 SendAction(CWallet *const pwallet, const CAction& action, const CKey &ke
     std::string strError;
     CCoinControl coinControl;
     coinControl.fAllowOtherInputs = true;
-    coinControl.destChange = destChange;
     if (!pwallet->CreateTransaction(*locked_chain, vecSend, newTx, reservekey, nFeeRequired, nChangePosInOut, strError, coinControl, false)) {
         if (nFeeRequired > curBalance)
             strError = strprintf("Error: This transaction requires a transaction fee of at least %s", FormatMoney(nFeeRequired));
@@ -5420,47 +5419,27 @@ static UniValue getbindinginfo(const JSONRPCRequest& request)
                 "getbindinginfo",
                 "\nunbind plotid mapping.",
                 {
-                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "address"},
+                    {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "plotid"},
                 },
                 RPCResult{
-                    "{\n"
-                    "  \"from\": {\n"
-                    "    \"address\": \"17VkcJoDJEHyuCKgGyky8CGNnb1kPgbwr4\",\n"
-                    "    \"plotid\": 8512475111423,\n"
-                    "  },\n"
-                    "  \"to\": {\n"
-                    "    \"address\": \"1QEWDafENaWingtsSGtnc3M2fiQVuEkZHi\",\n"
-                    "    \"plotid\": 14776299456771222,\n"
-                    "  }\n"
-                    "}\n"
+                    "[4608248319413296905, \"115UBsnjcaVEX95ud3NJBy2XLpbL2dtCev\"]"
                  },
                 RPCExamples{
-                    HelpExampleCli("getbindinginfo", "17VkcJoDJEHyuCKgGyky8CGNnb1kPgbwr4")
+                    HelpExampleCli("getbindinginfo", "4608248319413296905")
                 },
             }.ToString()
         );
     }
     LOCK(cs_main);
-    auto strAddress = request.params[0].get_str();
-    CTxDestination dest = DecodeDestination(strAddress);
-    if (!IsValidDestination(dest) || dest.type() != typeid(CKeyID)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
-    }
-    auto from = boost::get<CKeyID>(dest);
-    auto to = prelationview->To(from);
-    if (to == CKeyID()) {
-        return UniValue(UniValue::VOBJ);
-    }
-    UniValue fromVal(UniValue::VOBJ);
-    fromVal.pushKV("address", EncodeDestination(CTxDestination(from)));
-    fromVal.pushKV("plotid", from.GetPlotID());
+    auto plotid = std::stoull(request.params[0].get_str());
+    auto to = prelationview->To(plotid);
+    UniValue result(UniValue::VARR);
+    if (to == CKeyID())
+        return result;
 
-    UniValue toVal(UniValue::VOBJ);
-    toVal.pushKV("address", EncodeDestination(CTxDestination(to)));
-    toVal.pushKV("plotid", to.GetPlotID());
-    UniValue result(UniValue::VOBJ);
-    result.pushKV("from", fromVal);
-    result.pushKV("to", toVal);
+    result.push_back(plotid);
+    result.push_back(EncodeDestination(CTxDestination(to)));
+
     return result;
 }
 
@@ -5474,26 +5453,7 @@ static UniValue listbindings(const JSONRPCRequest& request)
                 {},
                 RPCResult{
                     "[\n"
-                    "  {\n"
-                    "    \"from\": {\n"
-                    "      \"address\": \"1LfaqrJ9vrXTU3RdVTsHz7Dgn5b1ooN8KN\",\n"
-                    "      \"plotid\": 14045118739489404631,\n"
-                    "    },\n"
-                    "    \"to\": {\n"
-                    "      \"address\": \"1GwFgPsGwmyohfMCbdD6tGCYMNzbeK1N4V\",\n"
-                    "      \"plotid\": 12495994880773508270,\n"
-                    "    }\n"
-                    "  },\n"
-                    "  {\n"
-                    "    \"from\": {\n"
-                    "      \"address\": \"1JWYKVAY2r73FbMxwZdgwXaHPwT2srRrUx\",\n"
-                    "      \"plotid\": 8195665653426294976,\n"
-                    "    },\n"
-                    "    \"to\": {\n"
-                    "      \"address\": \"1MxchR6KHhE44M4KGPMRJtftY5jcXZ3nfA\",\n"
-                    "      \"plotid\": 13765273405587843045,\n"
-                    "    }\n"
-                    "  }\n"
+                    "  [4608248319413296905, \"115UBsnjcaVEX95ud3NJBy2XLpbL2dtCev\"]\n"
                     "]\n"
                  },
                 RPCExamples{
@@ -5507,18 +5467,10 @@ static UniValue listbindings(const JSONRPCRequest& request)
     for (auto relation : prelationview->ListRelations()) {
         auto from = relation.first;
         auto to = relation.second;
-        UniValue fromVal(UniValue::VOBJ);
-        fromVal.pushKV("address", EncodeDestination(CTxDestination(from)));
-        fromVal.pushKV("plotid", from.GetPlotID());
-
-        UniValue toVal(UniValue::VOBJ);
-        toVal.pushKV("address", EncodeDestination(CTxDestination(to)));
-        toVal.pushKV("plotid", to.GetPlotID());
-
-        UniValue val(UniValue::VOBJ);
-        val.pushKV("from", fromVal);
-        val.pushKV("to", toVal);
-        results.push_back(val);
+        UniValue bindpair(UniValue::VARR);
+        bindpair.push_back(from.GetPlotID());
+        bindpair.push_back(EncodeDestination(CTxDestination(to)));
+        results.push_back(bindpair);
     }
     return results;
 }

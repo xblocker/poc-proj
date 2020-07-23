@@ -34,7 +34,7 @@ bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& gen_to, c
     }
 
     if (this->deadline != 0 && deadline >= this->deadline) {
-        LogPrintf("Invalid deadline %uul\n", deadline);
+        LogPrintf("Invalid deadline %uul\n", deadline / prevIndex->nBaseTarget);
         return false;
     }
     auto ts = (deadline / prevIndex->nBaseTarget);
@@ -53,6 +53,7 @@ bool CPOCBlockAssember::UpdateDeadline(const int height, const CKeyID& gen_to, c
         auto ts = (deadline / chainActive.Tip()->nBaseTarget);
         this->dl = lastBlockTime + ts;
     }
+    deadline = ts;
     return true;
 }
 

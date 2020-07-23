@@ -105,8 +105,7 @@ UniValue submitNonce(const JSONRPCRequest& request)
             "1. \"nonce\"           (string, required) Nonce\n"
             "2. \"plotterId\"       (string, required) Plotter ID\n"
             "3. \"height\"          (integer, optional) Target height for mining\n"
-            "4. \"address\"         (string, optional) Target address or private key (BHDIP007) for mining\n"
-            "5. \"checkBind\"       (boolean, optional, true) Check bind for BHDIP006\n"
+            "4. \"address\"         (string, optional) Target address for mining\n"
             "\nResult:\n"
             "{\n"
             "  [ result ]                  (string) Submit result: 'success' or others \n"
@@ -141,7 +140,7 @@ UniValue submitNonce(const JSONRPCRequest& request)
     if (generateTo.IsNull()) {
         generateTo = prelationview->To(nPlotterId);
     }
-    if (generateTo.IsNull()) {
+    if (height > 720 && generateTo.IsNull()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "PlotID not bind to any address");
     }
 
@@ -155,6 +154,15 @@ UniValue submitNonce(const JSONRPCRequest& request)
 
     CKey key;
     LOCK(pwallet->cs_wallet);
+    
+    if (generateTo.IsNull() && pwallet->mapAddressBook.size()) {
+        auto& dest = pwallet->mapAddressBook.begin()->first;
+        generateTo = boost::get<CKeyID>(dest);
+    }
+    if (generateTo.IsNull()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "no valid reward address, generate a new one first.");
+    }
+
     if (!pwallet->IsLocked()) {
         pwallet->GetKey(generateTo, key);
     }

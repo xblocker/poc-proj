@@ -1,6 +1,6 @@
 #include <poc.h>
 #include <chain.h>
-
+#include <chainparams.h>
 #include <vector>
 
 using namespace std;
@@ -32,9 +32,6 @@ extern "C" {
 #define HASH_CAP 4096
 #define SCOOP_SIZE 64
 #define PLOT_SIZE (HASH_CAP * SCOOP_SIZE) // 4096*64
-
-const uint64_t INITIAL_BASE_TARGET = 18325193796L;
-const uint64_t MAX_BASE_TARGET = 18325193796L;
 
 
 uint256 CalcGenerationSignature(uint256 lastSig, uint64_t lastPlotID)
@@ -142,6 +139,8 @@ bool CheckProofOfCapacity(const uint256 genSig, const uint64_t height, const uin
 
 uint64_t AdjustBaseTarget(const CBlockIndex* prevBlock, const uint32_t nTime)
 {
+    auto INITIAL_BASE_TARGET = Params().GetConsensus().InitialBaseTarget();
+    auto MAX_BASE_TARGET = INITIAL_BASE_TARGET;
     if (prevBlock == nullptr) 
         return INITIAL_BASE_TARGET;
     auto height = prevBlock->nHeight + 1;
@@ -224,6 +223,8 @@ uint64_t AdjustBaseTarget(const CBlockIndex* prevBlock, const uint32_t nTime)
 
 void AdjustBaseTarget(const CBlockIndex* prevBlock, CBlock* block)
 {
+    auto INITIAL_BASE_TARGET = Params().GetConsensus().InitialBaseTarget();
+    auto MAX_BASE_TARGET = INITIAL_BASE_TARGET;
     // 1. Gensis block
     auto height = 0;
     if (prevBlock != nullptr) {

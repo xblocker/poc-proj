@@ -73,7 +73,10 @@ struct Params {
     bool fPowNoRetargeting;
     int64_t nPowTargetSpacing;
     int64_t nPowTargetTimespan;
+    int64_t nPocTargetSpacing;
+    int64_t nPocBaseTarget;
     int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
+    int64_t InitialBaseTarget() const { return nPocBaseTarget / nPocTargetSpacing; }
     uint256 nMinimumCumulativeDiff;
     uint256 defaultAssumeValid;
     CAmount nActionFee;

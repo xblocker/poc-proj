@@ -11,7 +11,7 @@
 #include <util/system.h>
 #include <util/strencodings.h>
 #include <versionbitsinfo.h>
-
+#include <validation.h>
 #include <assert.h>
 
 #include <boost/algorithm/string/classification.hpp>
@@ -73,6 +73,8 @@ public:
         consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 4 * 60;
+        consensus.nPocBaseTarget = 4398046511104L;
+        consensus.nPocTargetSpacing = 240;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
@@ -100,7 +102,7 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000000000f1c54590ee18d15ec70e68c8cd4cfbadb1b4f11697eee"); //563378
 
-        consensus.nActionFee = 16 * COIN;
+        consensus.nActionFee = DEFAULT_TRANSACTION_MAXFEE;
         /**
          * The message start string is designed to be unlikely to occur in normal data.
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
@@ -121,7 +123,7 @@ public:
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
-        genesis = CreateGenesisBlock(1592638195, 2083236893, 18325193796L, 1, genesisOutputScript, genesisReward);
+        genesis = CreateGenesisBlock(1592638195, 2083236893, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
         auto str = consensus.hashGenesisBlock.ToString();
 
@@ -182,6 +184,8 @@ public:
         consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nPocBaseTarget = 4398046511104L;
+        consensus.nPocTargetSpacing = 240;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
@@ -222,7 +226,7 @@ public:
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
-        genesis = CreateGenesisBlock(1592638195, 414098458, 18325193796L, 1, genesisOutputScript, genesisReward);
+        genesis = CreateGenesisBlock(1592638195, 414098458, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
 
         vFixedSeeds.clear();
@@ -244,7 +248,7 @@ public:
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
         fMineBlocksOnDemand = false;
-        consensus.nActionFee = 16 * COIN;
+        consensus.nActionFee = DEFAULT_TRANSACTION_MAXFEE;
 
         checkpointData = {
         };
@@ -279,6 +283,8 @@ public:
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nPocBaseTarget = 4398046511104L;
+        consensus.nPocTargetSpacing = 2;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
         consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
@@ -299,7 +305,7 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
-        consensus.nActionFee = 16 * COIN;
+        consensus.nActionFee = DEFAULT_TRANSACTION_MAXFEE;
 
         pchMessageStart[0] = 0xfa;
         pchMessageStart[1] = 0xbf;
@@ -318,7 +324,7 @@ public:
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
-        genesis = CreateGenesisBlock(1592638195, 2, 18325193796L, 1, genesisOutputScript, genesisReward);
+        genesis = CreateGenesisBlock(1592638195, 2, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
         auto str = consensus.hashGenesisBlock.ToString();
 
