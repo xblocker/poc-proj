@@ -1809,8 +1809,8 @@
         <translation>无法解锁钱包</translation>
     </message>
     <message>
-        <source>Make binding takes 16 lv, are you sure to continue?</source>
-        <translation>绑定算力需要16个lv, 确定要继续绑定吗?</translation>
+        <source>Make binding takes 16 FML, are you sure to continue?</source>
+        <translation>绑定算力需要16个FML, 确定要继续绑定吗?</translation>
     </message>
     <message>
         <source>Wallet doesn&apos;t have private key for address: &quot;%1&quot;</source>
@@ -1833,8 +1833,8 @@
         <translation>此地址没有任何算力绑定信息, 请不要浪费你的金钱!</translation>
     </message>
     <message>
-        <source>Unbinding takes 16 lv, are you sure to continue?</source>
-        <translation>解绑算力需要16lv, 确定要继续吗?</translation>
+        <source>Unbinding takes 16 FML, are you sure to continue?</source>
+        <translation>解绑算力需要16FML, 确定要继续吗?</translation>
     </message>
     <message>
         <source>Transaction &quot;%1&quot; was created for plot id unbinding</source>

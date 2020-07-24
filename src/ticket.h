@@ -149,7 +149,6 @@ private:
     std::map<CKeyID, std::vector<CTicketRef>> ticketsInAddr;
     CAmount ticketPrice;
     int slotIndex;
-    /** Base firestone price is 3000 LV.*/
     static CAmount BaseTicketPrice;
 };
 

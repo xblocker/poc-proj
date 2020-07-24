@@ -56,9 +56,9 @@ public:
      */
     enum Unit
     {
-        LV,
-        mLV,
-        uLV,
+        FML,
+        mFML,
+        uFML,
         SAT
     };
 

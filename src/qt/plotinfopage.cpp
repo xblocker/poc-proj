@@ -244,7 +244,7 @@ void PlotInfoPage::on_btnBind_clicked()
       return;
     }
 
-    int ret = QMessageBox::warning(this, windowTitle(), tr("Make binding takes 16 lv, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this, windowTitle(), tr("Make binding takes 16 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
     if (ret != QMessageBox::Yes) {
         return;
     }
@@ -311,7 +311,7 @@ void PlotInfoPage::on_btnUnbind_clicked()
       return;
     }
 
-    int ret = QMessageBox::warning(this, windowTitle(), tr("Unbinding takes 16 lv, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this, windowTitle(), tr("Unbinding takes 16 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
     if (ret != QMessageBox::Yes) {
         return;
     }
