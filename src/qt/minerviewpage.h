@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2019 The Lava Core developers
+// Copyright (c) 2011-2019 The Fermat Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef LAVA_QT_MINERVIEWPAGE_H
-#define LAVA_QT_MINERVIEWPAGE_H
+#ifndef FERMAT_QT_MINERVIEWPAGE_H
+#define FERMAT_QT_MINERVIEWPAGE_H
 
 #include <QWidget>
 
@@ -25,4 +25,4 @@ private:
     Ui::MinerviewPage *ui;
 };
 
-#endif // LAVA_QT_MINERVIEWPAGE_H
+#endif // FERMAT_QT_MINERVIEWPAGE_H

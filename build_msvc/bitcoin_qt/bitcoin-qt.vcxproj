@@ -14,7 +14,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F7EE2B3-E57F-3666-B03F-6ED000198BD0}</ProjectGuid>
     <RootNamespace>bitcoin-qt</RootNamespace>
-    <ProjectName>lava-qt</ProjectName>
+    <ProjectName>fermat-qt</ProjectName>
     <Keyword>QtVS_v302</Keyword>
     <VcpkgTriplet Condition="'$(Platform)'=='Win32'">x86-windows-static</VcpkgTriplet>
     <VcpkgTriplet Condition="'$(Platform)'=='x64'">x64-windows-static</VcpkgTriplet>

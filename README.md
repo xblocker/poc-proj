@@ -1,35 +1,35 @@
-Lava Core integration/staging tree
+Bitcoin Core integration/staging tree
 =====================================
 
-[![Build Status](https://travis-ci.com/lavaio/lava.svg?token=mHzysCzzvrSWVpd4jq6Z&branch=dev)](https://travis-ci.com/lavaio/lava)
+[![Build Status](https://travis-ci.com/bitcoin/bitcoin.svg?token=mHzysCzzvrSWVpd4jq6Z&branch=dev)](https://travis-ci.com/bitcoin/bitcoin)
 
-https://lavacore.org
+https://bitcoin.org
 
-What is Lava?
+What is Bitcoin?
 ----------------
 
-Lava is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Lava uses peer-to-peer technology to operate
+Bitcoin is an experimental digital currency that enables instant payments to
+anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
 with no central authority: managing transactions and issuing money are carried
-out collectively by the network. Lava Core is the name of open source
+out collectively by the network. Bitcoin Core is the name of open source
 software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Lava Core software, see https://lavacore.org/en/download/, or read the
-[original whitepaper](https://lavacore.org/lava.pdf).
+the Bitcoin Core software, see https://bitcoin.org/download/, or read the
+[original whitepaper](https://bitcoin.org/bitcoin.pdf).
 
 License
 -------
 
-Lava Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
+Bitcoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
 information or see https://opensource.org/licenses/MIT.
 
 Development Process
 -------------------
 
 The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/lavaio/lava/tags) are created
-regularly to indicate new official, stable release versions of Lava Core.
+completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
+regularly to indicate new official, stable release versions of Bitcoin Core.
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md)
 and useful hints for developers can be found in [doc/developer-notes.md](doc/developer-notes.md).

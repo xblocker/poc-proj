@@ -1,15 +1,15 @@
 *.tar.gz
 
 *.exe
-src/lava
-src/lavad
-src/lava-cli
-src/lava-tx
-src/lava-wallet
-src/test/test_lava
+src/fermat
+src/fermatd
+src/fermat-cli
+src/fermat-tx
+src/fermat-wallet
+src/test/test_fermat
 src/test/test_bitcoin_fuzzy
-src/qt/lava-qt
-src/qt/test/test_lava-qt
+src/qt/fermat-qt
+src/qt/test/test_fermat-qt
 
 # autoreconf
 Makefile.in
@@ -46,14 +46,14 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/lava-qt.cflags
-src/qt/lava-qt.cxxflags
-src/qt/lava-qt.config
-src/qt/lava-qt.creator
-src/qt/lava-qt.creator.user
-src/qt/lava-qt.files
-src/qt/lava-qt.includes
-src/qt/lava-qt.pro.user
+src/qt/fermat-qt.cflags
+src/qt/fermat-qt.cxxflags
+src/qt/fermat-qt.config
+src/qt/fermat-qt.creator
+src/qt/fermat-qt.creator.user
+src/qt/fermat-qt.files
+src/qt/fermat-qt.includes
+src/qt/fermat-qt.pro.user
 
 .vscode
 .deps

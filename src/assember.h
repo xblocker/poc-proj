@@ -1,5 +1,5 @@
-#ifndef LAVA_ASSEMBER_H
-#define LAVA_ASSEMBER_H
+#ifndef FERMAT_ASSEMBER_H
+#define FERMAT_ASSEMBER_H
 
 #include <config/bitcoin-config.h>
 #include <pubkey.h>

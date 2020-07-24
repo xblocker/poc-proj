@@ -1,9 +1,9 @@
-// Copyright (c) 2012-2019 The Lava Core developers
+// Copyright (c) 2012-2019 The Fermat Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef LAVA_BLOCKCACHE_H
-#define LAVA_BLOCKCACHE_H
+#ifndef FERMAT_BLOCKCACHE_H
+#define FERMAT_BLOCKCACHE_H
 
 #include <primitives/block.h>
 
@@ -29,4 +29,4 @@ private:
 };
 
 extern std::unique_ptr<CBlockCache> g_blockCache;
-#endif // LAVA_BLOCKCACHE_H
+#endif // FERMAT_BLOCKCACHE_H

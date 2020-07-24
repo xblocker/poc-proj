@@ -82,18 +82,18 @@ TESTS =
 BENCHMARKS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += lavad
+  bin_PROGRAMS += fermatd
 endif
 
 if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += lava-cli
+  bin_PROGRAMS += fermat
 endif
 if BUILD_BITCOIN_TX
-  bin_PROGRAMS += lava-tx
+  bin_PROGRAMS += fermat-tx
 endif
 if ENABLE_WALLET
 if BUILD_BITCOIN_WALLET
-  bin_PROGRAMS += lava-wallet
+  bin_PROGRAMS += fermat-wallet
 endif
 endif
 
@@ -499,16 +499,16 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind binary #
-lavad_SOURCES = bitcoind.cpp
-lavad_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-lavad_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-lavad_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+fermatd_SOURCES = bitcoind.cpp
+fermatd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+fermatd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+fermatd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-lavad_SOURCES += bitcoind-res.rc
+fermatd_SOURCES += bitcoind-res.rc
 endif
 
-lavad_LDADD = \
+fermatd_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_SERVER) \
@@ -523,38 +523,38 @@ lavad_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-lavad_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+fermatd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
 
 # bitcoin-cli binary #
-lava_cli_SOURCES = bitcoin-cli.cpp
-lava_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-lava_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-lava_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+fermat_SOURCES = bitcoin-cli.cpp
+fermat_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+fermat_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+fermat_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-lava_cli_SOURCES += bitcoin-cli-res.rc
+fermat_SOURCES += bitcoin-cli-res.rc
 endif
 
-lava_cli_LDADD = \
+fermat_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
 
-lava_cli_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
+fermat_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
 #
 
-# lava-tx binary #
-lava_tx_SOURCES = bitcoin-tx.cpp
-lava_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-lava_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-lava_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# fermat-tx binary #
+fermat_tx_SOURCES = bitcoin-tx.cpp
+fermat_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+fermat_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+fermat_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-lava_tx_SOURCES += bitcoin-tx-res.rc
+fermat_tx_SOURCES += bitcoin-tx-res.rc
 endif
 
-lava_tx_LDADD = \
+fermat_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -566,20 +566,20 @@ lava_tx_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-lava_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
+fermat_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
 
-# lava-wallet binary #
-lava_wallet_SOURCES = bitcoin-wallet.cpp
-lava_wallet_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-lava_wallet_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-lava_wallet_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# fermat-wallet binary #
+fermat_wallet_SOURCES = bitcoin-wallet.cpp
+fermat_wallet_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+fermat_wallet_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+fermat_wallet_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-lava_wallet_SOURCES += bitcoin-wallet-res.rc
+fermat_wallet_SOURCES += bitcoin-wallet-res.rc
 endif
 
-lava_wallet_LDADD = \
+fermat_wallet_LDADD = \
   $(LIBBITCOIN_WALLET_TOOL) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_SERVER) \
@@ -592,7 +592,7 @@ lava_wallet_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-lava_wallet_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+fermat_wallet_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
 #
 
 # bitcoinconsensus library #

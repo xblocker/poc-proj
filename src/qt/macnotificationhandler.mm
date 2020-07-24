@@ -13,7 +13,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.lavatech.Lava-Qt";
+        return @"org.fermat.Fermat-Qt";
     } else {
         return [self __bundleIdentifier];
     }

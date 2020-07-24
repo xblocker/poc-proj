@@ -1,5 +1,5 @@
-#ifndef LAVA_ACTION_DB_H
-#define LAVA_ACTION_DB_H
+#ifndef FERMAT_ACTION_DB_H
+#define FERMAT_ACTION_DB_H
 
 #include <dbwrapper.h>
 #include <pubkey.h>

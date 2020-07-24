@@ -553,8 +553,8 @@ void SetupServerArgs()
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/lavaio/lava>";
-    const std::string URL_WEBSITE = "<http://lavatech.org>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/bitcoin/bitcoin>";
+    const std::string URL_WEBSITE = "<http://bitcoin.org>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2019, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +
