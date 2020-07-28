@@ -5431,7 +5431,7 @@ static UniValue getbindinginfo(const JSONRPCRequest& request)
         );
     }
     LOCK(cs_main);
-    auto plotid = std::stoull(request.params[0].get_str());
+    uint64_t plotid = std::stoull(request.params[0].get_str());
     auto to = prelationview->To(plotid);
     UniValue result(UniValue::VARR);
     if (to == CKeyID())

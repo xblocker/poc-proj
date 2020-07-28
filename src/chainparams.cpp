@@ -108,11 +108,11 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xd9;
-        pchMessageStart[1] = 0xb4;
-        pchMessageStart[2] = 0xbe;
-        pchMessageStart[3] = 0xf9;
-        nDefaultPort = 6868;
+        pchMessageStart[0] = 0xbe;
+        pchMessageStart[1] = 0xd9;
+        pchMessageStart[2] = 0xf9;
+        pchMessageStart[3] = 0xb4;
+        nDefaultPort = 5566;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
@@ -210,12 +210,12 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75"); //1354312
 
-        pchMessageStart[0] = 0x07;
-        pchMessageStart[1] = 0x09;
-        pchMessageStart[2] = 0x11;
-        pchMessageStart[3] = 0x0b;
+        pchMessageStart[0] = 0x11;
+        pchMessageStart[1] = 0x07;
+        pchMessageStart[2] = 0x0b;
+        pchMessageStart[3] = 0x09;
         
-        nDefaultPort = 16868;
+        nDefaultPort = 5567;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 30;
         m_assumed_chain_state_size = 2;
@@ -305,11 +305,11 @@ public:
 
         consensus.nActionFee = DEFAULT_TRANSACTION_MAXFEE;
 
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xbf;
-        pchMessageStart[2] = 0xb5;
-        pchMessageStart[3] = 0xda;
-        nDefaultPort = 18444;
+        pchMessageStart[0] = 0xb5;
+        pchMessageStart[1] = 0xfa;
+        pchMessageStart[2] = 0xda;
+        pchMessageStart[3] = 0xbf;
+        nDefaultPort = 5568;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
         m_assumed_chain_state_size = 0;
