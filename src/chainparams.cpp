@@ -76,7 +76,7 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 4 * 60;
         consensus.nPocBaseTarget = 4398046511104L;
-        consensus.nPocTargetSpacing = 240;
+        consensus.nPocTargetSpacing = 2;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
@@ -173,7 +173,7 @@ public:
         };
 
         /* disable fallback fee on mainnet */
-        m_fallback_fee_enabled = false;
+        m_fallback_fee_enabled = true;
 
         nSlotLength = 2048;
     }
@@ -186,7 +186,7 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 65700;
+        consensus.nSubsidyHalvingInterval = 200;
         consensus.BIP16Exception = uint256S("0x62ca4ef31a124cedd557a97fd59f623ae7eff424a15a13304dd44ec2263a9b03");
         consensus.BIP34Height = 0;
         consensus.BIP34Hash = uint256S("0x62ca4ef31a124cedd557a97fd59f623ae7eff424a15a13304dd44ec2263a9b03");
@@ -275,7 +275,7 @@ public:
         /* enable fallback fee on testnet */
         m_fallback_fee_enabled = true;
 
-        nSlotLength = 2048 / 8 / 2;
+        nSlotLength = 128;
     }
 };
 
@@ -286,7 +286,7 @@ class CRegTestParams : public CChainParams {
 public:
     explicit CRegTestParams(const ArgsManager& args) {
         strNetworkID = "regtest";
-        consensus.nSubsidyHalvingInterval = 150;
+        consensus.nSubsidyHalvingInterval = 50;
         consensus.BIP16Exception = uint256();
         consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
         consensus.BIP34Hash = uint256();
@@ -370,7 +370,7 @@ public:
         /* enable fallback fee on regtest */
         m_fallback_fee_enabled = true;
 
-        nSlotLength = 2048 / 8;
+        nSlotLength = 10;
     }
 
     /**
