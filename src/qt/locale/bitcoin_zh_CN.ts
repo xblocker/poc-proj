@@ -229,6 +229,14 @@
         <source>Warning: The Caps Lock key is on!</source>
         <translation>警告: 大写字母锁定已开启！</translation>
     </message>
+    <message>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FMLS&lt;/b&gt;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your FMLs from being stolen by malware infecting your computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -1717,8 +1725,8 @@
         <translation>默认挖矿信息</translation>
     </message>
     <message>
-        <source>Miner Address:</source>
-        <translation>收益地址</translation>
+        <source>Mnemonic:</source>
+        <translation>助记词</translation>
     </message>
     <message>
         <source>PlotId:</source>
@@ -1729,28 +1737,32 @@
         <translation>生成新PlotID</translation>
     </message>
     <message>
-        <source>New Mining Address</source>
-        <translation>新挖矿地址</translation>
+        <source>New Plot Info</source>
+        <translation>新算力ID</translation>
     </message>
     <message>
         <source>Failed to Generate New Plot Id</source>
-        <translation>无法生成PlotId</translation>
+        <translation type="vanished">无法生成PlotId</translation>
     </message>
     <message>
         <source>Please check the address pool</source>
-        <translation>请检查地址池</translation>
+        <translation type="vanished">请检查地址池</translation>
     </message>
     <message>
         <source>Form</source>
         <translation>表单</translation>
     </message>
     <message>
-        <source>Bind Address</source>
-        <translation>绑定地址</translation>
+        <source>Bind Plotid</source>
+        <translation>绑定PlotID</translation>
     </message>
     <message>
-        <source>Binding From Address</source>
-        <translation>绑定的原地址</translation>
+        <source>Binding From Plotid</source>
+        <translation>绑定的原Plotid</translation>
+    </message>
+    <message>
+        <source>Binding From Mnemonic</source>
+        <translation>绑定的助记词</translation>
     </message>
     <message>
         <source>Bind To Address</source>
@@ -1769,19 +1781,19 @@
         <translation>算力绑定信息</translation>
     </message>
     <message>
-        <source>Address To Query</source>
-        <translation>要查询的地址</translation>
+        <source>Plotid To Query</source>
+        <translation>要查询的Plotid</translation>
     </message>
     <message>
         <source>Query Binding</source>
         <translation>查询算力绑定信息</translation>
     </message>
     <message>
-        <source>Please enter a valid address</source>
-        <translation>请输入合法的地址</translation>
+        <source>Please enter a valid PlotID</source>
+        <translation>请输入合法的PlotID</translation>
     </message>
     <message>
-        <source>No binding found for address: &quot;%1&quot;</source>
+        <source>No binding found for PlotID: &quot;%1&quot;</source>
         <translation>地址 &quot;%1&quot; 没有对应的算力绑定信息</translation>
     </message>
     <message>
@@ -1794,7 +1806,11 @@
     </message>
     <message>
         <source>Invalid from address</source>
-        <translation>无效的原地址</translation>
+        <translation type="vanished">无效的原地址</translation>
+    </message>
+    <message>
+        <source>passphrase and plotid mismatch</source>
+        <translation>助记词和Plotid不匹配</translation>
     </message>
     <message>
         <source>Invalid to address</source>
@@ -1802,19 +1818,19 @@
     </message>
     <message>
         <source>From address should not be the same as to address!</source>
-        <translation>原地址和目标地址不能相同!</translation>
+        <translation type="vanished">原地址和目标地址不能相同!</translation>
     </message>
     <message>
         <source>Failed to unlock wallet</source>
         <translation>无法解锁钱包</translation>
     </message>
     <message>
-        <source>Make binding takes 16 FML, are you sure to continue?</source>
-        <translation>绑定算力需要16个FML, 确定要继续绑定吗?</translation>
+        <source>Make binding takes 10 FML, are you sure to continue?</source>
+        <translation>绑定算力需要10个FML, 确定要继续绑定吗?</translation>
     </message>
     <message>
         <source>Wallet doesn&apos;t have private key for address: &quot;%1&quot;</source>
-        <translation>钱包中没有地址 &quot;%1&quot; 的密钥</translation>
+        <translation type="vanished">钱包中没有地址 &quot;%1&quot; 的密钥</translation>
     </message>
     <message>
         <source>Transaction &quot;%1&quot; was created for plot id binding</source>
@@ -1825,16 +1841,16 @@
         <translation>解绑算力</translation>
     </message>
     <message>
-        <source>This address already binds to an address, are you sure to continue?</source>
-        <translation>此地址已经绑定算力到了某个地址, 确定要继续吗?</translation>
+        <source>This PlotID already binds to an address, are you sure to continue?</source>
+        <translation>此PlotID已经绑定算力到了某个地址, 确定要继续吗?</translation>
     </message>
     <message>
-        <source>No binding for this address, please don&apos;t waste your money!</source>
-        <translation>此地址没有任何算力绑定信息, 请不要浪费你的金钱!</translation>
+        <source>No binding for this PlotID, please don&apos;t waste your money!</source>
+        <translation>此PlotID没有任何算力绑定信息, 请不要浪费你的金钱!</translation>
     </message>
     <message>
         <source>Unbinding takes 16 FML, are you sure to continue?</source>
-        <translation>解绑算力需要16FML, 确定要继续吗?</translation>
+        <translation type="vanished">解绑算力需要16FML, 确定要继续吗?</translation>
     </message>
     <message>
         <source>Transaction &quot;%1&quot; was created for plot id unbinding</source>
@@ -1847,6 +1863,14 @@
     <message>
         <source>Failed to create unbind transaction, please make sure there is enough balance in your wallet</source>
         <translation type="unfinished">创建解绑算力交易失败, 请确保钱包中有充足的余额</translation>
+    </message>
+    <message>
+        <source>Miner Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unbinding takes 10 FML, are you sure to continue?</source>
+        <translation type="unfinished">解绑算力需要16FML, 确定要继续吗? {10 ?}</translation>
     </message>
 </context>
 <context>

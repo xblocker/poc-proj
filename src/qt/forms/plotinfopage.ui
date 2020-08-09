@@ -65,7 +65,7 @@
            <bool>true</bool>
           </property>
           <property name="title">
-           <string>New Mining Address</string>
+           <string>New Plot Info</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <property name="spacing">
@@ -76,25 +76,25 @@
              <property name="fieldGrowthPolicy">
               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
              </property>
-             <item row="0" column="0">
+             <item row="1" column="0">
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Miner Address:</string>
+                <string>Mnemonic:</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="ebNewAddress"/>
-             </item>
-             <item row="1" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="plotIdLabel_2">
                <property name="text">
                 <string>PlotId:</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="2" column="1">
               <widget class="QLineEdit" name="ebNewId"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QTextEdit" name="ebNewAddress"/>
              </item>
             </layout>
            </item>
@@ -182,17 +182,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="plotIdLabel">
-            <property name="text">
-             <string>PlotId:</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="ebPlotId">
             <property name="readOnly">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="plotIdLabel">
+            <property name="text">
+             <string>PlotId:</string>
             </property>
            </widget>
           </item>
@@ -206,14 +206,21 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Bind Address</string>
+          <string>Bind Plotid</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="ebMnemonicFrom">
+         <property name="placeholderText">
+          <string>Binding From Mnemonic</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="ebAddressFrom">
          <property name="placeholderText">
-          <string>Binding From Address</string>
+          <string>Binding From Plotid</string>
          </property>
         </widget>
        </item>
@@ -272,7 +279,7 @@
        <item>
         <widget class="QLineEdit" name="ebAddrToQuery">
          <property name="placeholderText">
-          <string>Address To Query</string>
+          <string>Plotid To Query</string>
          </property>
         </widget>
        </item>
@@ -308,10 +315,8 @@
   <tabstop>btnNewAddress</tabstop>
   <tabstop>ebAddrToQuery</tabstop>
   <tabstop>btnQuery</tabstop>
-  <tabstop>ebAddressFrom</tabstop>
   <tabstop>ebAddressTo</tabstop>
   <tabstop>btnBind</tabstop>
-  <tabstop>ebNewAddress</tabstop>
   <tabstop>ebNewId</tabstop>
  </tabstops>
  <resources/>

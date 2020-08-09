@@ -31,6 +31,7 @@
 #include <validation.h> // cs_main
 #include <univalue.h>
 #include <actiondb.h>
+#include <rpc/passphrase.h>
 #include <rpc/protocol.h>
 #include <wallet/wallet.h>
 #include "txfeemodifier.h"
@@ -45,6 +46,8 @@ PlotInfoPage::PlotInfoPage(const PlatformStyle *platformStyle, QWidget *parent) 
     ui->setupUi(this);
 
     ui->gbNewAddress->hide();
+    ui->plotIdLabel->hide();
+    ui->ebPlotId->hide();
 
     connect(ui->btnNewAddress, SIGNAL(clicked()), SLOT(onNewPlotIdClicked()));
 }
@@ -75,7 +78,7 @@ void PlotInfoPage::updateData() {
     auto plotId = QString("%0").arg(defaultAddress->GetID().GetPlotID());
 
     ui->ebMinerAddress->setText(address);
-    ui->ebPlotId->setText(plotId);
+    //ui->ebPlotId->setText(plotId);
   }
 }
 
@@ -107,19 +110,12 @@ Optional<CPubKey> PlotInfoPage::getDefaultMinerAddress()
 
 void PlotInfoPage::onNewPlotIdClicked()
 {
-  auto addr = getNewMinerAddress();
-  if (addr) {
-    CTxDestination dest = GetDestinationForKey(addr.get(), OutputType::LEGACY);
-    auto address = QString::fromStdString(EncodeDestination(dest));
-    auto plotId = QString("%0").arg(addr->GetID().GetPlotID());
+  auto passphrase = poc::generatePassphrase();
+  auto plotId = QString("%0").arg(poc::GeneratePlotId(passphrase));
 
-    ui->ebNewAddress->setText(address);
-    ui->ebNewId->setText(plotId);
-    ui->gbNewAddress->show();
-  } else {
-    QMessageBox::critical(nullptr, tr("Failed to Generate New Plot Id"),
-                          tr("Please check the address pool"));
-  }
+  ui->ebNewAddress->setText(QString::fromStdString(passphrase));
+  ui->ebNewId->setText(plotId);
+  ui->gbNewAddress->show();
 }
 
 Optional<CPubKey> PlotInfoPage::getNewMinerAddress()
@@ -175,49 +171,46 @@ static inline Optional<QPair<PlotInfoPage::AddressInfo, PlotInfoPage::AddressInf
 }
 
 QString PlotInfoPage::getBindingInfoStr(const QPair<PlotInfoPage::AddressInfo, PlotInfoPage::AddressInfo>& data) {
-   auto message = tr("Address \"%1\" binds to \"%2\"")
-           .arg(QString::fromStdString(data.first.address))
-           .arg(QString::fromStdString(data.second.address));
-   return message;
+  auto message = tr("Address \"%1\" binds to \"%2\"")
+          .arg(QString("%0").arg(data.first.plotId))
+          .arg(QString::fromStdString(data.second.address));
+  return message;
 }
 
 void PlotInfoPage::on_btnQuery_clicked()
 {
-   QString address = ui->ebAddrToQuery->text().trimmed();
-   if(address.isEmpty()) {
-        QMessageBox::warning(this, windowTitle(), tr("Please enter a valid address"), QMessageBox::Ok, QMessageBox::Ok);
-        return;
-   }
-   CTxDestination dest = DecodeDestination(address.toStdString());
-   if (!IsValidDestination(dest) || dest.type() != typeid(CKeyID)) {
-     QMessageBox::warning(this, windowTitle(), tr("Please enter a valid address"), QMessageBox::Ok, QMessageBox::Ok);
-     return;
-   }
+  QString address = ui->ebAddrToQuery->text().trimmed();
+  if (address.isEmpty()) {
+    QMessageBox::warning(this, windowTitle(), tr("Please enter a valid PlotID"), QMessageBox::Ok, QMessageBox::Ok);
+    return;
+  }
+  uint64_t plotid = std::stoull(address.toStdString());
+  auto from = CKeyID(plotid);
+  auto results = getBinding(from);
+  if (!results) {
+    QMessageBox::information(this, windowTitle(), tr("No binding found for PlotID: \"%1\"").arg(address), QMessageBox::Ok, QMessageBox::Ok);
+    return;
+  }
 
-   auto from = boost::get<CKeyID>(dest);
-   auto results = getBinding(from);
-   if(!results) {
-     QMessageBox::information(this, windowTitle(), tr("No binding found for address: \"%1\"").arg(address), QMessageBox::Ok, QMessageBox::Ok);
-     return;
-   }
-
-   auto data = results.get();
-   auto message = getBindingInfoStr(data);
-   QMessageBox::information(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
+  auto data = results.get();
+  auto message = getBindingInfoStr(data);
+  QMessageBox::information(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
 }
 
 void PlotInfoPage::on_btnBind_clicked()
 {
-     if(!_walletModel || _walletModel->wallet().isLocked()) {
+    if (!_walletModel || _walletModel->wallet().isLocked()) {
         QMessageBox::warning(this, windowTitle(), tr("Please unlock wallet to continue"), QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
+    auto fromMnem = ui->ebMnemonicFrom->text().trimmed().toStdString();
     auto fromAddr = ui->ebAddressFrom->text().trimmed();
+    uint64_t plotID = poc::GeneratePlotId(fromMnem);
     auto toAddr = ui->ebAddressTo->text().trimmed();
-    CTxDestination fromDest = DecodeDestination(fromAddr.toStdString());
     CTxDestination toDest = DecodeDestination(toAddr.toStdString());
-    if (!IsValidDestination(fromDest) || fromDest.type() != typeid(CKeyID)) {
-      QMessageBox::warning(this, windowTitle(), tr("Invalid from address"), QMessageBox::Ok, QMessageBox::Ok);
+
+    if (std::to_string(plotID) != fromAddr.toStdString()) {
+      QMessageBox::warning(this, windowTitle(), tr("passphrase and plotid mismatch"), QMessageBox::Ok, QMessageBox::Ok);
       return;
     }
     if (!IsValidDestination(toDest) || toDest.type() != typeid(CKeyID)) {
@@ -225,126 +218,113 @@ void PlotInfoPage::on_btnBind_clicked()
       return;
     }
 
-    if (fromAddr == toAddr) {
-      QMessageBox::warning(this, windowTitle(), tr("From address should not be the same as to address!"), QMessageBox::Ok, QMessageBox::Ok);
-      return;
-    }
-
-    auto results = getBinding(boost::get<CKeyID>(fromDest));
-    if(results) {
-      int ret = QMessageBox::warning(this, windowTitle(), tr("This address already binds to an address, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
+    auto fromPid = CKeyID(plotID);
+    auto results = getBinding(fromPid);
+    if (results) {
+      int ret = QMessageBox::warning(this, windowTitle(), tr("This PlotID already binds to an address, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
       if (ret != QMessageBox::Yes) {
         return;
       }
     }
 
     auto lock = _walletModel->requestUnlock();
-    if(!lock.isValid()) {
+    if (!lock.isValid()) {
       QMessageBox::warning(this, windowTitle(), tr("Failed to unlock wallet"), QMessageBox::Ok, QMessageBox::Ok);
       return;
     }
 
-    int ret = QMessageBox::warning(this, windowTitle(), tr("Make binding takes 16 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this, windowTitle(), tr("Make binding takes 10 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
     if (ret != QMessageBox::Yes) {
         return;
     }
 
-    auto fromKey = _walletModel->wallet().getKeyForDestination(fromDest);
-    if (fromKey.IsNull()) {
-      QMessageBox::warning(this, windowTitle(), tr("Invalid from address"), QMessageBox::Ok, QMessageBox::Ok);
-      return;
-    }
-    auto toKey = boost::get<CKeyID>(toDest);
-
+    auto from = CKeyID(plotID);
+    auto target = boost::get<CKeyID>(toDest);
+    auto action = MakeBindAction(from, target);
     CKey key;
-    if (!_walletModel->wallet().getPrivKey(fromKey, key)) {
-        QMessageBox::warning(this, windowTitle(), tr("Wallet doesn't have private key for address: \"%1\""), QMessageBox::Ok, QMessageBox::Ok);
-        return;
-    }
+    unsigned char hash[32];
+    CSHA256().Write((const unsigned char*)fromMnem.data(), (size_t)fromMnem.length()).Finalize(hash);
+    key.Set(hash, hash + 32, true);
 
     try {
-        auto action = MakeBindAction(fromKey, toKey);
         QString message;
         {
           TxFeeModifer feeUpdater(_walletModel->wallet());
-          auto txid = _walletModel->wallet().sendAction(action, key, CTxDestination(fromKey));
+          auto txid = _walletModel->wallet().sendAction(action, key, CTxDestination(from));
           message = tr("Transaction \"%1\" was created for plot id binding").arg(QString::fromStdString(txid.GetHex()));
         }
 
         QMessageBox::information(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
-    } catch(const UniValue& ex) {
+    } catch (const UniValue& ex) {
         std::map<std::string, UniValue> valMap;
         ex.getObjMap(valMap);
         auto code = valMap["code"].get_int();
         auto msg = valMap["message"].get_str();
         auto message = QString("got error code: %1, message: %2").arg(code).arg(QString::fromStdString(msg));
         QMessageBox::critical(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
-    }catch(...) {
+    } catch (...) {
         QMessageBox::critical(this, windowTitle(), tr("Failed to create plot id binding transaction, please make sure there is enough balance in your wallet"), QMessageBox::Ok, QMessageBox::Ok);
     }
 }
 
 void PlotInfoPage::on_btnUnbind_clicked()
 {
-    if(!_walletModel || _walletModel->wallet().isLocked()) {
+    if (!_walletModel || _walletModel->wallet().isLocked()) {
         QMessageBox::warning(this, windowTitle(), tr("Please unlock wallet to continue"), QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
+    auto fromMnem = ui->ebMnemonicFrom->text().trimmed().toStdString();
     auto fromAddr = ui->ebAddressFrom->text().trimmed();
-    CTxDestination fromDest = DecodeDestination(fromAddr.toStdString());
-    if (!IsValidDestination(fromDest) || fromDest.type() != typeid(CKeyID)) {
-      QMessageBox::warning(this, windowTitle(), tr("Invalid from address"), QMessageBox::Ok, QMessageBox::Ok);
-      return;
+    uint64_t plotID = poc::GeneratePlotId(fromMnem);
+
+    if (std::to_string(plotID) != fromAddr.toStdString()) {
+        QMessageBox::warning(this, windowTitle(), tr("passphrase and plotid mismatch"), QMessageBox::Ok, QMessageBox::Ok);
+        return;
     }
 
-
     auto lock = _walletModel->requestUnlock();
-    if(!lock.isValid()) {
+    if (!lock.isValid()) {
       QMessageBox::warning(this, windowTitle(), tr("Failed to unlock wallet"), QMessageBox::Ok, QMessageBox::Ok);
       return;
     }
 
-    auto results = getBinding(boost::get<CKeyID>(fromDest));
-    if(!results) {
-      QMessageBox::information(this, windowTitle(), tr("No binding for this address, please don't waste your money!"), QMessageBox::Ok, QMessageBox::Ok);
+    auto fromPid = CKeyID(plotID);
+    auto results = getBinding(fromPid);
+    if (!results) {
+      QMessageBox::information(this, windowTitle(), tr("No binding for this PlotID, please don't waste your money!"), QMessageBox::Ok, QMessageBox::Ok);
       return;
     }
 
-    int ret = QMessageBox::warning(this, windowTitle(), tr("Unbinding takes 16 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this, windowTitle(), tr("Unbinding takes 10 FML, are you sure to continue?"), QMessageBox::Yes, QMessageBox::Cancel);
     if (ret != QMessageBox::Yes) {
         return;
     }
 
-    auto fromKey = _walletModel->wallet().getKeyForDestination(fromDest);
-    if (fromKey.IsNull()) {
-      QMessageBox::warning(this, windowTitle(), tr("Invalid from address"), QMessageBox::Ok, QMessageBox::Ok);
-      return;
-    }
+    auto from = CKeyID(plotID);
+    auto action = CAction(CUnbindAction(from));
     CKey key;
-    if (!_walletModel->wallet().getPrivKey(fromKey, key)) {
-        QMessageBox::warning(this, windowTitle(), tr("Wallet doesn't have private key for address: \"%1\""), QMessageBox::Ok, QMessageBox::Ok);
-        return;
-    }
+    unsigned char hash[32];
+    CSHA256().Write((const unsigned char*)fromMnem.data(), (size_t)fromMnem.length()).Finalize(hash);
+    key.Set(hash, hash + 32, true);
 
     try {
-        auto action = CAction(CUnbindAction(fromKey));
         QString message;
         {
           TxFeeModifer feeUpdater(_walletModel->wallet());
-          auto txid = _walletModel->wallet().sendAction(action, key, CTxDestination(fromKey));
+          auto txid = _walletModel->wallet().sendAction(action, key, CTxDestination(from));
           message = tr("Transaction \"%1\" was created for plot id unbinding").arg(QString::fromStdString(txid.GetHex()));
         }
 
         QMessageBox::information(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
-    } catch(const UniValue& ex) {
+    } catch (const UniValue& ex) {
         std::map<std::string, UniValue> valMap;
         ex.getObjMap(valMap);
         auto code = valMap["code"].get_int();
         auto msg = valMap["message"].get_str();
         auto message = QString("got error code: %1, message: %2").arg(code).arg(QString::fromStdString(msg));
         QMessageBox::critical(this, windowTitle(), message, QMessageBox::Ok, QMessageBox::Ok);
-    }catch(...) {
+    } catch (...) {
         QMessageBox::critical(this, windowTitle(), tr("Failed to create unbind transaction, please make sure there is enough balance in your wallet"), QMessageBox::Ok, QMessageBox::Ok);
     }
 }
