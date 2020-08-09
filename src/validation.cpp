@@ -2076,7 +2076,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCH, "    - Callbacks: %.2fms [%.2fs (%.2fms/blk)]\n", MILLI * (nTime6 - nTime5), nTimeCallbacks * MICRO, nTimeCallbacks * MILLI / nBlocksTotal);
 
     // check plotid
-    if (pindex->nHeight > 720) { // ~ 2 days
+    if (pindex->nHeight > chainparams.SlotLength() * 4) { // ~ 4 slot
         auto script = block.vtx[0]->vout[0].scriptPubKey;
         CTxDestination dest;
         ExtractDestination(script, dest);
