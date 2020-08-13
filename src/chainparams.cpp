@@ -97,7 +97,7 @@ public:
         // The best chain should have at least this much work.
         // TODO: better cumulative diff?
         // minimumCumulativeDiff = initialCumulativeDiff + 1
-        consensus.nMinimumCumulativeDiff = uint256S("0x000000000000000000000000000000000000000000000001000000003bffffff");
+        consensus.nMinimumCumulativeDiff = ArithToUint256(arith_uint256(CUMULATIVE_DIFF_DENOM / consensus.InitialBaseTarget() - 1));
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000000000f1c54590ee18d15ec70e68c8cd4cfbadb1b4f11697eee"); //563378
@@ -130,7 +130,13 @@ public:
         auto str = consensus.hashGenesisBlock.ToString();
 
         vFixedSeeds.clear();
-        vSeeds.clear();
+        vSeeds = {
+            "hk.fermat.io",
+            "tk.fermat.io",
+            "so.fermat.io",
+            "sp.fermat.io",
+        };
+
         // nodes with support for servicebits filtering should be at the top
 
         // Note that of those which support the service bits prefix, most only support a subset of

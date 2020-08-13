@@ -2026,7 +2026,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     }
     CAmount nMinerReward = withFs ? (subsidy * 4 * 0.75 + nFees) : (subsidy * 0.75 + nFees);
     CAmount nInterest = withFs ? (subsidy * 4 * 0.125) : (subsidy * 0.125);
-    CAmount nStaking = withFs ? (subsidy * 4 * 0.125) : (subsidy * 3 * 0.75 + subsidy * 0.125)
+    CAmount nStaking = withFs ? (subsidy * 4 * 0.125) : (subsidy * 3 * 0.75 + subsidy * 0.125);
     int slotIndex = pindex->nHeight / chainparams.SlotLength();
     CAmount nTotalOut;
     if (slotIndex < 5)
@@ -2085,7 +2085,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCH, "    - Callbacks: %.2fms [%.2fs (%.2fms/blk)]\n", MILLI * (nTime6 - nTime5), nTimeCallbacks * MICRO, nTimeCallbacks * MILLI / nBlocksTotal);
 
     // check plotid
-    if (pindex->nHeight > chainparams.SlotLength() * 4) { // ~ 4 slot
+    if (pindex->nHeight > chainparams.SlotLength() * 5) { // ~ 5 slot
         auto script = block.vtx[0]->vout[0].scriptPubKey;
         CTxDestination dest;
         ExtractDestination(script, dest);

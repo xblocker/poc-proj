@@ -140,7 +140,7 @@ UniValue submitNonce(const JSONRPCRequest& request)
     if (generateTo.IsNull()) {
         generateTo = prelationview->To(nPlotterId);
     }
-    if (height > Params().SlotLength() * 4 && generateTo.IsNull()) {
+    if (height > Params().SlotLength() * 5 && generateTo.IsNull()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "PlotID not bind to any address");
     }
 
