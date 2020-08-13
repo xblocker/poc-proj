@@ -325,7 +325,7 @@ CAmount CTicketView::TicketPriceInSlot(const int index)
         else if (ticketsInSlot[i].size() < SlotLength()) {
             price = std::max(CAmount(price * 0.95), i * nSlotLowerBoundTickerPrice);
         }
-        price = (i + 1) > 4 ? std::max(BaseTicketPrice, price) : BaseTicketPrice;
+        price = (i + 1) > 5 ? std::max(BaseTicketPrice, price) : BaseTicketPrice;
     }
     return price;
 }
@@ -342,7 +342,7 @@ void CTicketView::updateTicketPrice(const int height)
             ticketPrice = std::max(CAmount(ticketPrice * 0.95), slotIndex * nSlotLowerBoundTickerPrice);
         }
         slotIndex = int(height / len);
-        ticketPrice = slotIndex > 4 ? std::max(BaseTicketPrice, ticketPrice) : BaseTicketPrice;
+        ticketPrice = slotIndex > 5 ? std::max(BaseTicketPrice, ticketPrice) : BaseTicketPrice;
         LogPrint(BCLog::FIRESTONE, "%s: updata ticket slot, index:%d, price:%d, prevSlotTicketCount:%d\n", __func__, slotIndex, ticketPrice, prevSlotTicketSize);
     }
 }

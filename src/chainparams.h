@@ -87,6 +87,7 @@ public:
     const uint64_t TargetDeadline() { return 60 * 60 * 24; }
     const uint32_t SlotLength() const { return nSlotLength; }
     const CScript& OutletScriptPubKey() const { return outletScriptPubKey; }
+    const CScript& StakingScriptPubKey() const { return stakingScriptPubKey; }
 
 protected:
     CChainParams() {}
@@ -111,6 +112,7 @@ protected:
     bool m_fallback_fee_enabled;
     uint32_t nSlotLength;
     CScript outletScriptPubKey;
+    CScript stakingScriptPubKey;
 };
 
 /**

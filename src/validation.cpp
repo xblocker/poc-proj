@@ -2001,7 +2001,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs (%.2fms/blk)]\n", (unsigned)block.vtx.size(), MILLI * (nTime3 - nTime2), MILLI * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : MILLI * (nTime3 - nTime2) / (nInputs - 1), nTimeConnect * MICRO, nTimeConnect * MILLI / nBlocksTotal);
 
     CAmount subsidy = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
-    CAmount blockReward = subsidy;
+    bool withFs = false;
     if (block.vtx.size() >= 2) {
         auto out = block.vtx[1]->vin[0].prevout;
         if (block.vtx[0]->vin[0].scriptSig == CScript() << pindex->nHeight << ToByteVector(out.hash) << out.n << OP_0) {
@@ -2015,7 +2015,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                     auto beg = std::max((index - 1) * pticketview->SlotLength(), 0);
                     auto end = index * pticketview->SlotLength() - 1;
                     if (ticketInHeight >= beg && ticketInHeight <= end) {
-                        blockReward *= 4;
+                        withFs = true;
                         LogPrint(BCLog::FIRESTONE, "%s: coinbase with firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
                     } else {
                         LogPrint(BCLog::FIRESTONE, "%s: firestone locktime error firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
@@ -2024,24 +2024,33 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             }
         }
     }
+    CAmount nMinerReward = withFs ? (subsidy * 4 * 0.75 + nFees) : (subsidy * 0.75 + nFees);
+    CAmount nInterest = withFs ? (subsidy * 4 * 0.125) : (subsidy * 0.125);
+    CAmount nStaking = withFs ? (subsidy * 4 * 0.125) : (subsidy * 3 * 0.75 + subsidy * 0.125)
     int slotIndex = pindex->nHeight / chainparams.SlotLength();
+    CAmount nTotalOut;
     if (slotIndex < 5)
-        blockReward = subsidy * 4;
-    CAmount nStakingAddtion = (subsidy * 4 - blockReward) * 0.75;
-    if (block.vtx[0]->GetValueOut() > blockReward + nStakingAddtion + nFees)
+        nTotalOut = subsidy * 4 + nFees;
+    else
+        nTotalOut = nMinerReward + nInterest + nStaking;
+    
+    if (block.vtx[0]->GetValueOut() > nTotalOut)
         return state.DoS(100,
             error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
-                block.vtx[0]->GetValueOut(), blockReward + nFees),
+                block.vtx[0]->GetValueOut(), nTotalOut),
             REJECT_INVALID, "bad-cb-amount");
 
-    if (block.vtx[0]->vout.size() != 2)
+    if (block.vtx[0]->vout.size() != 3)
         return state.DoS(100,
             error("ConnectBlock(): coinbase missing outlet"),
             REJECT_INVALID, "bad-cb-no-outlet");
 
-    CAmount nVout0 = slotIndex > 4 ? (blockReward * 0.75 + nFees) : (blockReward + nFees);
-    CAmount nVout1 = slotIndex > 4 ? (blockReward * 0.125) : 0;
-    if (block.vtx[0]->vout[0].nValue != nVout0 || block.vtx[0]->vout[1].nValue != nVout1)
+    CAmount nVout0 = slotIndex < 5 ? nTotalOut : nMinerReward;
+    CAmount nVout1 = slotIndex < 5 ? 0 : nInterest;
+    CAmount nVout2 = slotIndex < 5 ? 0 : nStaking;
+    if (block.vtx[0]->vout[0].nValue != nVout0
+        || block.vtx[0]->vout[1].nValue != nVout1
+        || block.vtx[0]->vout[2].nValue != nVout2)
         return state.DoS(100,
             error("ConnectBlock(): coinbase wrong outlet"),
             REJECT_INVALID, "bad-cb-wrong-outlet");
@@ -3191,10 +3200,12 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
         return state.DoS(100, false, REJECT_INVALID, "bad-cb-missing", false, "first tx is not coinbase");
 
     //check coinbase script
+    /*
     CTxDestination dest;
     ExtractDestination(block.vtx[0]->vout[0].scriptPubKey, dest);
     if (dest.type() != typeid(CKeyID)) 
         return state.DoS(100, false, REJECT_INVALID, "bad-cb-missing", false, "coinbase script is not pay2pub");
+    */
 
     for (unsigned int i = 1; i < block.vtx.size(); i++)
         if (block.vtx[i]->IsCoinBase())

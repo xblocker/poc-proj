@@ -4849,6 +4849,10 @@ UniValue buyfirestone(const JSONRPCRequest& request)
         throw JSONRPCError(RPC_VERIFY_REJECTED, "Can't buy firestone on slot's last block.");
     }
     
+    if (pticketview->SlotIndex() < 5) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Can't buy firestone on 0 ~ 4 slots.");
+    }
+    
     auto nAmount = pticketview->CurrentTicketPrice();
     auto redeemScript = GenerateTicketScript(keyID, locktime);
     dest = CTxDestination(CScriptID(redeemScript));

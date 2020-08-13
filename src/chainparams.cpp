@@ -117,10 +117,12 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        std::vector<unsigned char> scriptData1(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
-        std::vector<unsigned char> scriptData2(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
-        std::vector<unsigned char> scriptData3(ParseHex("76a91411b3f3a0b8f39b18ba4eb5e2ed39d97ca8c00fe688ac"));
+        std::vector<unsigned char> scriptData1(ParseHex("a914e930aaf89ad5643bc1f8a2cf9de4b119f5687ac387"));
+        std::vector<unsigned char> scriptData2(ParseHex("a914e8e256878ccc60cdd7b6ed9be232b1c82ab25df387"));
+        std::vector<unsigned char> scriptData3(ParseHex("a914ab81044d45907dc932be5214bc497fbd5397111787"));
+        std::vector<unsigned char> scriptData4(ParseHex("a9149a3372632eb917d3170c81fc4595666aee144e2587"));
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        stakingScriptPubKey = CScript(scriptData4.begin(), scriptData4.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
         genesis = CreateGenesisBlock(1592638195, 2083236893, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
@@ -220,10 +222,12 @@ public:
         m_assumed_blockchain_size = 30;
         m_assumed_chain_state_size = 2;
 
-        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData1(ParseHex("a914e930aaf89ad5643bc1f8a2cf9de4b119f5687ac387"));
+        std::vector<unsigned char> scriptData2(ParseHex("a914e8e256878ccc60cdd7b6ed9be232b1c82ab25df387"));
+        std::vector<unsigned char> scriptData3(ParseHex("a914ab81044d45907dc932be5214bc497fbd5397111787"));
+        std::vector<unsigned char> scriptData4(ParseHex("a9149a3372632eb917d3170c81fc4595666aee144e2587"));
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        stakingScriptPubKey = CScript(scriptData4.begin(), scriptData4.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
         genesis = CreateGenesisBlock(1592638195, 414098458, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
@@ -316,10 +320,12 @@ public:
 
         UpdateVersionBitsParametersFromArgs(args);
 
-        std::vector<unsigned char> scriptData1(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData2(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
-        std::vector<unsigned char> scriptData3(ParseHex("76a914b355e1c6abc655bae28efd6e36861e8e525a0bb688ac"));
+        std::vector<unsigned char> scriptData1(ParseHex("a914e930aaf89ad5643bc1f8a2cf9de4b119f5687ac387"));
+        std::vector<unsigned char> scriptData2(ParseHex("a914e8e256878ccc60cdd7b6ed9be232b1c82ab25df387"));
+        std::vector<unsigned char> scriptData3(ParseHex("a914ab81044d45907dc932be5214bc497fbd5397111787"));
+        std::vector<unsigned char> scriptData4(ParseHex("a9149a3372632eb917d3170c81fc4595666aee144e2587"));
         outletScriptPubKey = CScript(scriptData3.begin(), scriptData3.end());
+        stakingScriptPubKey = CScript(scriptData4.begin(), scriptData4.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
         genesis = CreateGenesisBlock(1592638195, 2, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);

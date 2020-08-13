@@ -179,7 +179,7 @@
     </message>
     <message>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FMLs&lt;/b&gt;!</source>
-        <translation>警告: 如果把钱包加密后又忘记密码，你就会从此&lt;b&gt;失去其中所有的Fermat了&lt;/b&gt;！</translation>
+        <translation type="vanished">警告: 如果把钱包加密后又忘记密码，你就会从此&lt;b&gt;失去其中所有的Fermat了&lt;/b&gt;！</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your Fermats from being stolen by malware infecting your computer.</source>
-        <translation>你的钱包现在已被加密。请记住，对钱包进行加密仍然不能完全防止感染电脑的恶意软件偷取你的Fermat。</translation>
+        <translation type="vanished">你的钱包现在已被加密。请记住，对钱包进行加密仍然不能完全防止感染电脑的恶意软件偷取你的Fermat。</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -984,6 +984,10 @@
         <translation>不能在火石周期的最后一块购买火石</translation>
     </message>
     <message>
+        <source>Can&apos;t buy firestone on on 0 ~ 4 slots.</source>
+        <translation type="vanished">不能在火石周期(0 ~ 4)购买火石</translation>
+    </message>
+    <message>
         <source>Buy firestone success!</source>
         <translation>成功购买火石!</translation>
     </message>
@@ -1022,6 +1026,10 @@
     <message>
         <source>Change address isn&apos;t an address in your wallet, are you sure?</source>
         <translation>找零地址不属于你, 确定要继续吗?</translation>
+    </message>
+    <message>
+        <source>Can&apos;t buy firestone on 0 ~ 4 slots.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

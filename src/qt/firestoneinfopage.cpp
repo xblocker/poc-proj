@@ -162,6 +162,10 @@ void FirestoneInfoPage::on_btnBuy_clicked()
           return;
         }
 
+        if (pticketview->SlotIndex() < 5) {
+          QMessageBox::warning(this, windowTitle(), tr("Can't buy firestone on 0 ~ 4 slots."), QMessageBox::Ok, QMessageBox::Ok);
+          return;
+        }
         auto nAmount = pticketview->CurrentTicketPrice();
         auto redeemScript = GenerateTicketScript(buyID, locktime);
         buyDest = CTxDestination(CScriptID(redeemScript));
