@@ -97,7 +97,7 @@ public:
         // The best chain should have at least this much work.
         // TODO: better cumulative diff?
         // minimumCumulativeDiff = initialCumulativeDiff + 1
-        consensus.nMinimumCumulativeDiff = ArithToUint256(arith_uint256(CUMULATIVE_DIFF_DENOM / consensus.InitialBaseTarget() - 1));
+        consensus.nMinimumCumulativeDiff = ArithToUint256(arith_uint256(CUMULATIVE_DIFF_DENOM) + arith_uint256(CUMULATIVE_DIFF_DENOM / consensus.InitialBaseTarget()));
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000000000f1c54590ee18d15ec70e68c8cd4cfbadb1b4f11697eee"); //563378
