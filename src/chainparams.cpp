@@ -125,7 +125,7 @@ public:
         stakingScriptPubKey = CScript(scriptData4.begin(), scriptData4.end());
         const std::vector<CScript> genesisOutputScript{ CScript(scriptData1.begin(), scriptData1.end()), CScript(scriptData2.begin(), scriptData2.end()) };
         const std::vector<CAmount> genesisReward = {100214400 * COIN, 150321600 * COIN};
-        genesis = CreateGenesisBlock(1592638195, 2083236893, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
+        genesis = CreateGenesisBlock(1598079600, 2083236893, consensus.InitialBaseTarget(), 1, genesisOutputScript, genesisReward);
         consensus.hashGenesisBlock = genesis.GetHash();
         auto str = consensus.hashGenesisBlock.ToString();
 

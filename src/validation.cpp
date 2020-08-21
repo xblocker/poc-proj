@@ -1138,10 +1138,31 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     if (halvings >= 64)
         return 0;
 
-    CAmount nSubsidy = 715 * COIN;
+    CAmount nSubsidy = 2860 * COIN;
     // Subsidy is cut in half every 260,000 blocks which will occur approximately every 4 years.
     nSubsidy *= std::pow(0.75, halvings);
     return nSubsidy;
+}
+
+std::tuple<CAmount, CAmount, CAmount> GetBlockCoinbaseOutValue(int nHeight, CAmount nSubsidy, bool withTicket)
+{
+    int halvings = 1;
+    if (nHeight < (4 * 2048)) {
+        return {nSubsidy, 0, 0};
+    } else if (nHeight < (8 * 2048)) {
+        halvings = 2;
+    } else if (nHeight < (32 * 2048)) {
+        halvings = 4;
+    } else {
+        halvings = 8;
+    }
+
+    if (withTicket) {
+        return {nSubsidy * 0.75, nSubsidy * 0.125, nSubsidy * 0.125};
+    }
+        
+    nSubsidy /= halvings;
+    return {nSubsidy * 0.75, nSubsidy * 0.125, nSubsidy * (halvings - 1 + 0.125)};
 }
 
 bool IsInitialBlockDownload()
@@ -2000,8 +2021,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     nTimeConnect += nTime3 - nTime2;
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs (%.2fms/blk)]\n", (unsigned)block.vtx.size(), MILLI * (nTime3 - nTime2), MILLI * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : MILLI * (nTime3 - nTime2) / (nInputs - 1), nTimeConnect * MICRO, nTimeConnect * MILLI / nBlocksTotal);
 
-    CAmount subsidy = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
-    bool withFs = false;
+    bool withTicket = false;
     if (block.vtx.size() >= 2) {
         auto out = block.vtx[1]->vin[0].prevout;
         if (block.vtx[0]->vin[0].scriptSig == CScript() << pindex->nHeight << ToByteVector(out.hash) << out.n << OP_0) {
@@ -2015,7 +2035,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                     auto beg = std::max((index - 1) * pticketview->SlotLength(), 0);
                     auto end = index * pticketview->SlotLength() - 1;
                     if (ticketInHeight >= beg && ticketInHeight <= end) {
-                        withFs = true;
+                        withTicket = true;
                         LogPrint(BCLog::FIRESTONE, "%s: coinbase with firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
                     } else {
                         LogPrint(BCLog::FIRESTONE, "%s: firestone locktime error firestone:%s:%d\n", __func__, ticket->out->hash.ToString(), ticket->out->n);
@@ -2024,15 +2044,13 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             }
         }
     }
-    CAmount nMinerReward = withFs ? (subsidy * 4 * 0.75 + nFees) : (subsidy * 0.75 + nFees);
-    CAmount nInterest = withFs ? (subsidy * 4 * 0.125) : (subsidy * 0.125);
-    CAmount nStaking = withFs ? (subsidy * 4 * 0.125) : (subsidy * 3 * 0.75 + subsidy * 0.125);
-    int slotIndex = pindex->nHeight / chainparams.SlotLength();
-    CAmount nTotalOut;
-    if (slotIndex < 5)
-        nTotalOut = subsidy * 4 + nFees;
-    else
-        nTotalOut = nMinerReward + nInterest + nStaking;
+
+    CAmount nMinerReward{0}, nInterest{0}, nStaking{0};
+    CAmount nSubsidy = GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+    std::tie(nMinerReward, nInterest, nStaking) = GetBlockCoinbaseOutValue(pindex->nHeight, nSubsidy, withTicket);
+    nMinerReward += nFees;
+    CAmount nTotalOut = nMinerReward + nInterest + nStaking;
+    assert(nTotalOut == nSubsidy + nFees);
     
     if (block.vtx[0]->GetValueOut() > nTotalOut)
         return state.DoS(100,
@@ -2045,12 +2063,10 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             error("ConnectBlock(): coinbase missing outlet"),
             REJECT_INVALID, "bad-cb-no-outlet");
 
-    CAmount nVout0 = slotIndex < 5 ? nTotalOut : nMinerReward;
-    CAmount nVout1 = slotIndex < 5 ? 0 : nInterest;
-    CAmount nVout2 = slotIndex < 5 ? 0 : nStaking;
-    if (block.vtx[0]->vout[0].nValue != nVout0
-        || block.vtx[0]->vout[1].nValue != nVout1
-        || block.vtx[0]->vout[2].nValue != nVout2)
+
+    if (block.vtx[0]->vout[0].nValue != nMinerReward
+        || block.vtx[0]->vout[1].nValue != nInterest
+        || block.vtx[0]->vout[2].nValue != nStaking)
         return state.DoS(100,
             error("ConnectBlock(): coinbase wrong outlet"),
             REJECT_INVALID, "bad-cb-wrong-outlet");
