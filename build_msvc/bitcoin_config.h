@@ -17,7 +17,7 @@
 #define CLIENT_VERSION_MINOR 18
 
 /* Build revision */
-#define CLIENT_VERSION_REVISION 2
+#define CLIENT_VERSION_REVISION 3
 
 /* Copyright holder(s) before %s replacement */
 #define COPYRIGHT_HOLDERS "The %s developers"
@@ -60,6 +60,9 @@
 
 /* define if the Boost::Unit_Test_Framework library is available */
 #define HAVE_BOOST_UNIT_TEST_FRAMEWORK /**/
+
+/* define if the obj/build.h is available */
+#define HAVE_BUILD_INFO 1
 
 /* Define to 1 if you have the <byteswap.h> header file. */
 /* #undef HAVE_BYTESWAP_H */
