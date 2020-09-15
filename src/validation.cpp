@@ -1148,7 +1148,7 @@ std::tuple<CAmount, CAmount, CAmount> GetBlockCoinbaseOutValue(int nHeight, CAmo
 {
     int halvings = 1;
     if (nHeight < (4 * 2048)) {
-        return {nSubsidy, 0, 0};
+        return std::make_tuple(CAmount(nSubsidy), CAmount(0), CAmount(0));
     } else if (nHeight < (8 * 2048)) {
         halvings = 2;
     } else if (nHeight < (32 * 2048)) {
@@ -1158,11 +1158,11 @@ std::tuple<CAmount, CAmount, CAmount> GetBlockCoinbaseOutValue(int nHeight, CAmo
     }
 
     if (withTicket) {
-        return {nSubsidy * 0.75, nSubsidy * 0.125, nSubsidy * 0.125};
+        return std::make_tuple(CAmount(nSubsidy * 0.75), CAmount(nSubsidy * 0.125), CAmount(nSubsidy * 0.125));
     }
         
     nSubsidy /= halvings;
-    return {nSubsidy * 0.75, nSubsidy * 0.125, nSubsidy * (halvings - 1 + 0.125)};
+    return std::make_tuple(CAmount(nSubsidy * 0.75), CAmount(nSubsidy * 0.125), CAmount(nSubsidy * (halvings - 1 + 0.125)));
 }
 
 bool IsInitialBlockDownload()
