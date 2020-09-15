@@ -648,11 +648,11 @@
     </message>
     <message>
         <source>Fire&amp;stone</source>
-        <translation>火石(&amp;S)</translation>
+        <translation>抵押(&amp;S)</translation>
     </message>
     <message>
         <source>Firestone Information</source>
-        <translation>火石信息</translation>
+        <translation>矿票信息</translation>
     </message>
 </context>
 <context>
@@ -877,7 +877,7 @@
     </message>
     <message>
         <source>Firestone Price</source>
-        <translation>火石价格</translation>
+        <translation>矿票价格</translation>
     </message>
     <message>
         <source>Lock Time</source>
@@ -885,7 +885,7 @@
     </message>
     <message>
         <source>Count</source>
-        <translation>火石数:</translation>
+        <translation>矿票数:</translation>
     </message>
     <message>
         <source>Buy:</source>
@@ -909,7 +909,7 @@
     </message>
     <message>
         <source>Buy Firestone</source>
-        <translation>购买火石</translation>
+        <translation>购买矿票</translation>
     </message>
     <message>
         <source>Query:</source>
@@ -917,19 +917,19 @@
     </message>
     <message>
         <source>The address to query</source>
-        <translation>要查询火石的地址</translation>
+        <translation>要查询矿票的地址</translation>
     </message>
     <message>
         <source>Query Firestone</source>
-        <translation>查询火石</translation>
+        <translation>查询矿票</translation>
     </message>
     <message>
         <source>Release:</source>
-        <translation>释放火石:</translation>
+        <translation>释放矿票:</translation>
     </message>
     <message>
         <source>Release expired firestones for an address</source>
-        <translation>释放指定地址中的已过期火石</translation>
+        <translation>释放指定地址中的已过期矿票</translation>
     </message>
     <message>
         <source>Receive Address</source>
@@ -941,7 +941,7 @@
     </message>
     <message>
         <source>Release Firestone</source>
-        <translation>释放火石</translation>
+        <translation>释放矿票</translation>
     </message>
     <message>
         <source>Invalid address</source>
@@ -949,23 +949,23 @@
     </message>
     <message>
         <source>Address &quot;%1&quot; has %2 firestones</source>
-        <translation>地址&quot;%1&quot;拥有&quot;%2&quot;个火石</translation>
+        <translation>地址&quot;%1&quot;拥有&quot;%2&quot;个矿票</translation>
     </message>
     <message>
         <source>%1 firestone(s) in current slot</source>
-        <translation>在当前周期有%1个火石</translation>
+        <translation>在当前周期有%1个矿票</translation>
     </message>
     <message>
         <source>%1 immature firestone(s)</source>
-        <translation type="unfinished">%1个未成熟的火石</translation>
+        <translation type="unfinished">%1个未成熟的矿票</translation>
     </message>
     <message>
         <source>%1 overdue firestone(s)</source>
-        <translation>%1过期火石</translation>
+        <translation>%1过期矿票</translation>
     </message>
     <message>
         <source>Firestone Information</source>
-        <translation>火石信息</translation>
+        <translation>矿票信息</translation>
     </message>
     <message>
         <source>Please unlock wallet to continue</source>
@@ -981,19 +981,19 @@
     </message>
     <message>
         <source>Can&apos;t buy firestone on slot&apos;s last block</source>
-        <translation>不能在火石周期的最后一块购买火石</translation>
+        <translation>不能在矿票周期的最后一块购买矿票</translation>
     </message>
     <message>
         <source>Can&apos;t buy firestone on on 0 ~ 4 slots.</source>
-        <translation type="vanished">不能在火石周期(0 ~ 4)购买火石</translation>
+        <translation type="vanished">不能在矿票周期(0 ~ 4)购买矿票</translation>
     </message>
     <message>
         <source>Buy firestone success!</source>
-        <translation>成功购买火石!</translation>
+        <translation>成功购买矿票!</translation>
     </message>
     <message>
         <source>Failed to buy firestone, please make sure there is enough balance in your wallet</source>
-        <translation>购买火石失败, 请确保钱包中有足够余额.</translation>
+        <translation>购买矿票失败, 请确保钱包中有足够余额.</translation>
     </message>
     <message>
         <source>Invalid refund address</source>
@@ -1001,15 +1001,15 @@
     </message>
     <message>
         <source>This address isn&apos;t your address, you can&apos;t release firestone for it</source>
-        <translation>此地址不属于你, 无法为它释放火石.</translation>
+        <translation>此地址不属于你, 无法为它释放矿票.</translation>
     </message>
     <message>
         <source>No firestones in this address</source>
-        <translation>此地址中没有火石.</translation>
+        <translation>此地址中没有矿票.</translation>
     </message>
     <message>
         <source>Failed to free firestone, something unexpected happened...</source>
-        <translation>释放火石失败, 发生了一些错误...</translation>
+        <translation>释放矿票失败, 发生了一些错误...</translation>
     </message>
     <message>
         <source>Failed to broadcast transation!</source>
@@ -1017,11 +1017,11 @@
     </message>
     <message>
         <source>Released %1 firestone(s)</source>
-        <translation>释放了%1个火石</translation>
+        <translation>释放了%1个矿票</translation>
     </message>
     <message>
         <source>Target address isn&apos;t an address in your wallet, are you sure?</source>
-        <translation>目标地址不属于你, 确定要为它购买火石吗?</translation>
+        <translation>目标地址不属于你, 确定要为它购买矿票吗?</translation>
     </message>
     <message>
         <source>Change address isn&apos;t an address in your wallet, are you sure?</source>
