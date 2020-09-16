@@ -167,7 +167,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "getmineraddress", 0, "new" },
     { "listslotfs", 0, "index" },
     { "listslotfs", 1, "all" },
-    { "getfirestone", 1, "all" },
+    { "getticket", 1, "all" },
     { "getslotinfo", 0, "index" }, 
     { "createhtlcaddress", 3, "lockheight" }, 
     { "spendhtlcwithwallet", 1, "out" }, 

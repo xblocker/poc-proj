@@ -3101,7 +3101,7 @@ bool GetTicketList(CWallet * const pwallet, CChain& chainActive, bool include_un
 	return true;
 }
 
-static UniValue getfirestone(const JSONRPCRequest& request)
+static UniValue getticket(const JSONRPCRequest& request)
 {
     std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     CWallet* const pwallet = wallet.get();
@@ -3112,13 +3112,13 @@ static UniValue getfirestone(const JSONRPCRequest& request)
 
     if (request.fHelp || request.params.size() > 4)
         throw std::runtime_error(
-        RPCHelpMan{"getfirestone",
+        RPCHelpMan{"getticket",
             "\nReturns array of unspent tickets\n"
             "with between minconf and maxconf (inclusive) confirmations.\n"
             "Optionally filter to only include txouts paid to specified addresses.\n",
             {
 				{"address", RPCArg::Type::STR, RPCArg::Optional::OMITTED, "address"},
-                {"all", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, "wether show all firestone."},
+                {"all", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, "wether show all ticket."},
             },
             RPCResult{
         "[                   (array of json object)\n"
@@ -3132,8 +3132,8 @@ static UniValue getfirestone(const JSONRPCRequest& request)
         "]\n"
             },
             RPCExamples{
-                HelpExampleCli("getfirestone", "\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\"")
-        + HelpExampleCli("getfirestone", "\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\" 6 9999999 true")
+                HelpExampleCli("getticket", "\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\"")
+        + HelpExampleCli("getticket", "\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\" 6 9999999 true")
             },
         }.ToString());
 
@@ -3208,12 +3208,12 @@ static UniValue listslotfs(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() > 2)
         throw std::runtime_error(
         RPCHelpMan{"listslotfs",
-        "\nReturns array of unspent firestone\n"
+        "\nReturns array of unspent ticket\n"
         "with between minconf and maxconf (inclusive) confirmations.\n"
         "Optionally filter to only include txouts paid to specified addresses.\n",
         {
             {"index", RPCArg::Type::NUM, RPCArg::Optional::OMITTED, "slot index."},
-            {"all", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, "wether show all firestone."},
+            {"all", RPCArg::Type::BOOL, RPCArg::Optional::OMITTED, "wether show all ticket."},
         },
         RPCResult{
         "[                   (array of json object)\n"
@@ -4790,7 +4790,7 @@ CTransactionRef SendMoneyWithOpRet(interfaces::Chain::Lock& locked_chain, CWalle
 }
 
 
-UniValue buyfirestone(const JSONRPCRequest& request)
+UniValue buyticket(const JSONRPCRequest& request)
 {
     std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     CWallet* const pwallet = wallet.get();
@@ -4802,7 +4802,7 @@ UniValue buyfirestone(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
             RPCHelpMan{
-                "buyfirestone",
+                "buyticket",
                 "\nFreeze some funds to get miner fs\n",
                 {
                     {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The address to recvie fs(only keyid)."},
@@ -4811,7 +4811,7 @@ UniValue buyfirestone(const JSONRPCRequest& request)
                 RPCResult{
                     "\"txid\"                  (string) The tx id.\n"},
                 RPCExamples{
-                    HelpExampleCli("buyfirestone", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" \"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\"")},
+                    HelpExampleCli("buyticket", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" \"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\"")},
             }
     .ToString());
     if (IsInitialBlockDownload()) {
@@ -4846,11 +4846,11 @@ UniValue buyfirestone(const JSONRPCRequest& request)
     LOCK(cs_main);
     auto locktime = pticketview->LockTime();
     if (locktime == chainActive.Height()) {
-        throw JSONRPCError(RPC_VERIFY_REJECTED, "Can't buy firestone on slot's last block.");
+        throw JSONRPCError(RPC_VERIFY_REJECTED, "Can't buy ticket on slot's last block.");
     }
     
     if (pticketview->SlotIndex() < 5) {
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Can't buy firestone on 0 ~ 4 slots.");
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Can't buy ticket on 0 ~ 4 slots.");
     }
     
     auto nAmount = pticketview->CurrentTicketPrice();
@@ -4935,7 +4935,7 @@ UniValue spendticket(const JSONRPCRequest& request)
                 "spendticket",
                 "\nSpend frozen output to address.\n",
                 {
-                    {"ticketid", RPCArg::Type::STR, RPCArg::Optional::NO, "The transaction id."},
+                    {"txid", RPCArg::Type::STR, RPCArg::Optional::NO, "The ticket id."},
                     {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The address to recvie."},
                 },
                 RPCResult{
@@ -4945,32 +4945,28 @@ UniValue spendticket(const JSONRPCRequest& request)
             }
     .ToString());
 
-	auto ticketid = ParseHashV(request.params[0], "params 1");
-	CTicket ticket;
-	/*if (!g_ticketindex->GetTicket(ticketid,ticket)){
-		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No such ticket.");
-	}*/
+	auto txid = ParseHashV(request.params[0], "txid");
+    auto prevTx = MakeTransactionRef();
+    uint256 hashBlock;
+    if (!GetTransaction(txid, prevTx, Params().GetConsensus(), hashBlock)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No such ticket.");
+    }
+
+    auto ticket = prevTx->Ticket();
+    if (ticket == nullptr){
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "ticket is invalid.");
+    }
+    auto redeemScript = ticket->redeemScript;
+    auto scriptPubkey = ticket->scriptPubkey;
 
     {
         LOCK(cs_main);
-        if (ticket.State(chainActive.Tip()->nHeight) != CTicket::CTicketState::OVERDUE){
+        if (ticket->State(chainActive.Tip()->nHeight) != CTicket::CTicketState::OVERDUE){
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "ticket is not overdue.");
         }
     }
 
-	auto txid = ticket.out->hash;
-	auto redeemScript = ticket.redeemScript;
-	auto scriptPubkey = ticket.scriptPubkey;
-
-    auto prevTx = MakeTransactionRef();
-    //LOCK(cs_main);
-    uint256 hashBlock;
-    if (!GetTransaction(txid, prevTx, Params().GetConsensus(), hashBlock)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No such gettransaction.");
-    }
-
     {
-        // check redeemScript
 		CScriptID scriptid;
 		auto ticketscript = scriptPubkey;
 		CScriptBase::const_iterator pc = ticketscript.begin();
@@ -4994,7 +4990,7 @@ UniValue spendticket(const JSONRPCRequest& request)
 		}
     }
 
-	auto n = ticket.out->n;
+	auto n = ticket->out->n;
     if (n < 0 || n >= prevTx->vout.size()) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid params");
     }
@@ -5147,7 +5143,7 @@ CTransactionRef CreateTicketAllSpendTx(CWallet* const pwallet, std::map<uint256,
 	return MakeTransactionRef(tx);
 }
 
-UniValue freefirestone(const JSONRPCRequest& request){
+UniValue freeticket(const JSONRPCRequest& request){
 	
 	std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
 	CWallet* const pwallet = wallet.get();
@@ -5159,7 +5155,7 @@ UniValue freefirestone(const JSONRPCRequest& request){
 	if (request.fHelp || request.params.size() > 2)
 		throw std::runtime_error(
 			RPCHelpMan{
-				"freefirestone",
+				"freeticket",
 				"\nSpend overdue and usable frozen tickets output to address.\n",
 			{
 				{"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The address who wants to free tickets."},
@@ -5177,7 +5173,7 @@ UniValue freefirestone(const JSONRPCRequest& request){
 				"}\n"
 			},
 				RPCExamples{
-				HelpExampleCli("freefirestone", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" \"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\"")},
+				HelpExampleCli("freeticket", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" \"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\"")},
 			}
 	.ToString());
 
@@ -5225,7 +5221,7 @@ UniValue freefirestone(const JSONRPCRequest& request){
 	UniValue results(UniValue::VOBJ);
     if (tickets.size() == 0){
         // return txid, all overdue ticketid
-        results.pushKV("ATTENTION:","YOUR ADDRESS HAS NO FIRESTONES!");
+        results.pushKV("ATTENTION:","YOUR ADDRESS HAS NO TICKETS!");
         return results;
     }
 
@@ -5241,7 +5237,7 @@ UniValue freefirestone(const JSONRPCRequest& request){
             CScript redeemScript = ticket->redeemScript;
 			ticketids.push_back(txid.ToString() + ":" + itostr(n));
 
-			// construct the freefirestone tx inputs.
+			// construct the freeticket tx inputs.
 			auto prevTx = MakeTransactionRef();
 			uint256 hashBlock;
 			if (!GetTransaction(txid, prevTx, Params().GetConsensus(), hashBlock)) {
@@ -5259,7 +5255,7 @@ UniValue freefirestone(const JSONRPCRequest& request){
     if (!pwallet->GetKey(keyID, key)){
         // return txid, all overdue ticketid
         UniValue results(UniValue::VOBJ);
-        results.pushKV("ATTENTION:","YOUR ADDRESS HAS NO FIRESTONES!");
+        results.pushKV("ATTENTION:","YOUR ADDRESS HAS NO TICKETS!");
         return results;
     }
 	auto tx = CreateTicketAllSpendTx(pwallet, txScriptInputs, outs, receiver, key);
@@ -5583,7 +5579,6 @@ static const CRPCCommand commands[] =
     { "wallet",             "listsinceblock",                   &listsinceblock,                {"blockhash","target_confirmations","include_watchonly","include_removed"} },
     { "wallet",             "listtransactions",                 &listtransactions,              {"label|dummy","count","skip","include_watchonly"} },
     { "wallet",             "listunspent",                      &listunspent,                   {"minconf","maxconf","addresses","include_unsafe","query_options"} },
-    { "wallet",             "getfirestone",                     &getfirestone,                  {"addresses","all"} },
     { "wallet",             "listslotfs",                       &listslotfs,                    {"index","all"} },
     { "wallet",             "listwalletdir",                    &listwalletdir,                 {} },
     { "wallet",             "listwallets",                      &listwallets,                   {} },
@@ -5605,14 +5600,15 @@ static const CRPCCommand commands[] =
     { "wallet",             "walletpassphrase",                 &walletpassphrase,              {"passphrase","timeout"} },
     { "wallet",             "walletpassphrasechange",           &walletpassphrasechange,        {"oldpassphrase","newpassphrase"} },
     //{ "wallet",             "walletprocesspsbt",                &walletprocesspsbt,             {"psbt","sign","sighashtype","bip32derivs"} },
-    { "wallet",             "buyfirestone",                     &buyfirestone,                  {"address","changer"} },
     { "poc",                "bindplotid",                       &bindplotid,                    {"address", "target"} },
     { "poc",                "unbindplotid",                     &unbindplotid,                  {"address"} },
     { "poc",                "listbindings",                     &listbindings,                  {""} },
     { "poc",                "getbindinginfo",                   &getbindinginfo,                {"address"} },
     { "wallet",             "wallethaskey",                     &wallethaskey,                  {"address"} },
-    //{ "wallet",             "spendticket",                      &spendticket,                   {"txid", "vout", "redeem", "address"} },
-	{ "wallet",             "freefirestone",					&freefirestone,				    {"address", "receiver"} },
+    { "wallet",             "spendticket",                      &spendticket,                   {"txid", "vout", "redeem", "address"} },
+	{ "ticket",             "freeticket",					    &freeticket,				    {"address", "receiver"} },
+    { "ticket",             "buyticket",                        &buyticket,                  {"address","changer"} },
+    { "ticket",             "getticket",                        &getticket,                  {"addresses","all"} },
 };
 // clang-format on
 

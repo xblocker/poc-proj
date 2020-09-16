@@ -187,14 +187,14 @@ UniValue getslotinfo(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() > 1)
         throw std::runtime_error(
             RPCHelpMan{ "getslotinfo",
-                "Returns an object containing fire stone slot info.\n",
+                "Returns an object containing ticket slot info.\n",
                 {
                     {"index", RPCArg::Type::NUM, RPCArg::Optional::OMITTED, "slot index."},
                 },
                 RPCResult{
             "{\n"
-            "  \"index\": xx,                  (numeric) the index of fire stone slot \n"
-            "  \"price\": xxxxxx,              (numeric) the current price of fire stone slot\n"
+            "  \"index\": xx,                  (numeric) the index of ticket slot \n"
+            "  \"price\": xxxxxx,              (numeric) the current price of ticket slot\n"
             "  \"count\": xx,                  (numeric) the count of tickets in this slot\n"
             "  \"locktime\": xxxxx,            (numeric) the end of this slot\n"
             "}\n" },
