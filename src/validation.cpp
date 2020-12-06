@@ -2086,7 +2086,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     LogPrint(BCLog::BENCH, "    - Callbacks: %.2fms [%.2fs (%.2fms/blk)]\n", MILLI * (nTime6 - nTime5), nTimeCallbacks * MICRO, nTimeCallbacks * MILLI / nBlocksTotal);
 
     // check plotid
-    if (pindex->nHeight > chainparams.SlotLength() * 5) { // ~ 5 slot
+    /*if (pindex->nHeight > chainparams.SlotLength() * 5) { // ~ 5 slot
         auto script = block.vtx[0]->vout[0].scriptPubKey;
         CTxDestination dest;
         ExtractDestination(script, dest);
@@ -2095,7 +2095,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         if (target != coinbaseDest) {
             return state.DoS(100, false, REJECT_INVALID, "bad-coinbase-plotid", false, "plotid not bind to coinbase scriptPubKey");
         }
-    }
+    }*/
 
     //accept action
     prelationview->ConnectBlock(pindex->nHeight, block);

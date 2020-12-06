@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <queue>
+#include <vector>
 #include <wallet/rpcwallet.h>
 #include <ticket.h>
 #include <consensus/tx_verify.h>
@@ -97,6 +98,21 @@ UniValue getMiningInfo(const JSONRPCRequest& request)
 
 UniValue submitNonce(const JSONRPCRequest& request)
 {
+    static std::vector<CKeyID> gMinerAddresses = {
+        boost::get<CKeyID>(DecodeDestination("1FwjKgB9dPVYNAVzk9ZXXyGSoWCoDMrGtj")),
+        boost::get<CKeyID>(DecodeDestination("17YjphTJ4tZFYVMQoPzKndDHiNagyo33Bc")),
+        boost::get<CKeyID>(DecodeDestination("15ATjGwWFqj21A8wS6o4hqvF68NVdNsh6Y")),
+        boost::get<CKeyID>(DecodeDestination("1DjDBJfTT619ZgzTTVUeNyZ5xJrSyJbLZ9")),
+        boost::get<CKeyID>(DecodeDestination("141vbS559SiFeNriuoTSo6ftbhVe5BNtuN")),
+        boost::get<CKeyID>(DecodeDestination("1M6kZ94dgecwQSZ1G6X9Ehzeo83aL2xymD")),
+        boost::get<CKeyID>(DecodeDestination("1LZSKjTijPPNvG5cKBq5KNLHLUD3FrQqaG")),
+        boost::get<CKeyID>(DecodeDestination("1BRT9QZyfowKJY1W5yVHUrPwoNdUPfLpcz")),
+        boost::get<CKeyID>(DecodeDestination("1HkcdYq2oVh64QUxcqSiQxf4kYyJtEhoj4")),
+        boost::get<CKeyID>(DecodeDestination("1Mg1sP52STczd6a7W9kYr2STyopn6zYnmz")),
+        boost::get<CKeyID>(DecodeDestination("1DrHRZcu5TFAh3E6cBLYiJKLWFj5JN9Dk")),
+        boost::get<CKeyID>(DecodeDestination("1J8kvPLL49HpSMpywUGQokF3eWeZu7f2Hz")),
+    };
+
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 5) {
         throw std::runtime_error(
             "submitNonce \"nonce\" \"plotterId\" (height \"address\" checkBind)\n"
@@ -140,9 +156,9 @@ UniValue submitNonce(const JSONRPCRequest& request)
     if (generateTo.IsNull()) {
         generateTo = prelationview->To(nPlotterId);
     }
-    if (height > Params().SlotLength() * 5 && generateTo.IsNull()) {
+    /*if (height > Params().SlotLength() * 5 && generateTo.IsNull()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "PlotID not bind to any address");
-    }
+    }*/
 
     std::vector<std::shared_ptr<CWallet>> wallets = GetWallets();
     auto wallet = wallets.size() == 1 || (request.fHelp && wallets.size() > 0) ? wallets[0] : nullptr;
@@ -161,6 +177,11 @@ UniValue submitNonce(const JSONRPCRequest& request)
     }
     if (generateTo.IsNull()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "no valid reward address, generate a new one first.");
+    }
+
+    auto it = std::find(gMinerAddresses.begin(), gMinerAddresses.end(), generateTo);
+    if (it == gMinerAddresses.end()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "invalid miner address.");
     }
 
     if (!pwallet->IsLocked()) {
