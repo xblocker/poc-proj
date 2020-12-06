@@ -1138,31 +1138,16 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     if (halvings >= 64)
         return 0;
 
-    CAmount nSubsidy = 2860 * COIN;
+    CAmount nSubsidy = 1037.0368 * COIN;
     // Subsidy is cut in half every 260,000 blocks which will occur approximately every 4 years.
-    nSubsidy *= std::pow(0.75, halvings);
+    nSubsidy *= std::pow(0.8, halvings);
     return nSubsidy;
 }
 
 std::tuple<CAmount, CAmount, CAmount> GetBlockCoinbaseOutValue(int nHeight, CAmount nSubsidy, bool withTicket)
 {
-    int halvings = 1;
-    if (nHeight < (4 * 2048)) {
-        return std::make_tuple(CAmount(nSubsidy), CAmount(0), CAmount(0));
-    } else if (nHeight < (8 * 2048)) {
-        halvings = 2;
-    } else if (nHeight < (32 * 2048)) {
-        halvings = 4;
-    } else {
-        halvings = 8;
-    }
-
-    if (withTicket) {
-        return std::make_tuple(CAmount(nSubsidy * 0.75), CAmount(nSubsidy * 0.125), CAmount(nSubsidy * 0.125));
-    }
-        
-    nSubsidy /= halvings;
-    return std::make_tuple(CAmount(nSubsidy * 0.75), CAmount(nSubsidy * 0.125), CAmount(nSubsidy * (halvings - 1 + 0.125)));
+    CAmount nStaking = nSubsidy * 0.16666;
+    return std::make_tuple(nSubsidy - nStaking, CAmount(0), nStaking);
 }
 
 bool IsInitialBlockDownload()
