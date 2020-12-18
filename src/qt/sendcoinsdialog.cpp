@@ -802,7 +802,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString& text)
         }
         else if (!IsValidDestination(dest)) // Invalid address
         {
-            ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Fermat address"));
+            ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Futu address"));
         }
         else // Valid address
         {

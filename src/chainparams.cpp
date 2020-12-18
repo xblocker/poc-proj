@@ -134,10 +134,10 @@ public:
 
         vFixedSeeds.clear();
         vSeeds = {
-            "hk.fermat.io",
-            "tk.fermat.io",
-            "so.fermat.io",
-            "sp.fermat.io",
+            "hk.futu.io",
+            "tk.futu.io",
+            "so.futu.io",
+            "sp.futu.io",
         };
 
         // nodes with support for servicebits filtering should be at the top

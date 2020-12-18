@@ -21,9 +21,9 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(FML);
-    unitlist.append(mFML);
-    unitlist.append(uFML);
+    unitlist.append(FUTU);
+    unitlist.append(mFUTU);
+    unitlist.append(uFUTU);
     unitlist.append(SAT);
     return unitlist;
 }
@@ -32,9 +32,9 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case FML:
-    case mFML:
-    case uFML:
+    case FUTU:
+    case mFUTU:
+    case uFUTU:
     case SAT:
         return true;
     default:
@@ -46,9 +46,9 @@ QString BitcoinUnits::longName(int unit)
 {
     switch(unit)
     {
-    case FML: return QString("FML");
-    case mFML: return QString("mFML");
-    case uFML: return QString::fromUtf8("µFML (bits)");
+    case FUTU: return QString("FUTU");
+    case mFUTU: return QString("mFUTU");
+    case uFUTU: return QString::fromUtf8("µFUTU (bits)");
     case SAT: return QString("Satoshi (sat)");
     default: return QString("???");
     }
@@ -58,7 +58,7 @@ QString BitcoinUnits::shortName(int unit)
 {
     switch(unit)
     {
-    case uFML: return QString::fromUtf8("bits");
+    case uFUTU: return QString::fromUtf8("bits");
     case SAT: return QString("sat");
     default: return longName(unit);
     }
@@ -68,9 +68,9 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case FML: return QString("Bitcoins");
-    case mFML: return QString("Milli-Bitcoins (1 / 1" THIN_SP_UTF8 "000)");
-    case uFML: return QString("Micro-Bitcoins (bits) (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+    case FUTU: return QString("Bitcoins");
+    case mFUTU: return QString("Milli-Bitcoins (1 / 1" THIN_SP_UTF8 "000)");
+    case uFUTU: return QString("Micro-Bitcoins (bits) (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
     case SAT: return QString("Satoshi (sat) (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
     default: return QString("???");
     }
@@ -80,9 +80,9 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case FML: return 100000000;
-    case mFML: return 100000;
-    case uFML: return 100;
+    case FUTU: return 100000000;
+    case mFUTU: return 100000;
+    case uFUTU: return 100;
     case SAT: return 1;
     default: return 100000000;
     }
@@ -92,9 +92,9 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case FML: return 8;
-    case mFML: return 5;
-    case uFML: return 2;
+    case FUTU: return 8;
+    case mFUTU: return 5;
+    case uFUTU: return 2;
     case SAT: return 0;
     default: return 0;
     }

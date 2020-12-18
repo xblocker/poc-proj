@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2019 The Fermat Core developers
+// Copyright (c) 2011-2019 The Futu Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef FERMAT_QT_MINERVIEWPAGE_H
-#define FERMAT_QT_MINERVIEWPAGE_H
+#ifndef FUTU_QT_MINERVIEWPAGE_H
+#define FUTU_QT_MINERVIEWPAGE_H
 
 #include <QWidget>
 
@@ -25,4 +25,4 @@ private:
     Ui::MinerviewPage *ui;
 };
 
-#endif // FERMAT_QT_MINERVIEWPAGE_H
+#endif // FUTU_QT_MINERVIEWPAGE_H

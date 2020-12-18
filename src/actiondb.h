@@ -1,5 +1,5 @@
-#ifndef FERMAT_ACTION_DB_H
-#define FERMAT_ACTION_DB_H
+#ifndef FUTU_ACTION_DB_H
+#define FUTU_ACTION_DB_H
 
 #include <dbwrapper.h>
 #include <pubkey.h>

@@ -68,12 +68,12 @@
         <translation>收款地址</translation>
     </message>
     <message>
-        <source>These are your Fermat addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>您可以给这些Fermat地址付款。在付款之前，务必要检查金额和收款地址是否正确。</translation>
+        <source>These are your Futu addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>您可以给这些Futu地址付款。在付款之前，务必要检查金额和收款地址是否正确。</translation>
     </message>
     <message>
-        <source>These are your Fermat addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>您可以用这些Fermat地址收款。建议在每次交易时，都使用一个新的收款地址。</translation>
+        <source>These are your Futu addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>您可以用这些Futu地址收款。建议在每次交易时，都使用一个新的收款地址。</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -178,8 +178,8 @@
         <translation>确认钱包加密</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FMLs&lt;/b&gt;!</source>
-        <translation type="vanished">警告: 如果把钱包加密后又忘记密码，你就会从此&lt;b&gt;失去其中所有的Fermat了&lt;/b&gt;！</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FUTUs&lt;/b&gt;!</source>
+        <translation type="vanished">警告: 如果把钱包加密后又忘记密码，你就会从此&lt;b&gt;失去其中所有的Futu了&lt;/b&gt;！</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -190,8 +190,8 @@
         <translation>钱包已加密</translation>
     </message>
     <message>
-        <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your Fermats from being stolen by malware infecting your computer.</source>
-        <translation type="vanished">你的钱包现在已被加密。请记住，对钱包进行加密仍然不能完全防止感染电脑的恶意软件偷取你的Fermat。</translation>
+        <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your Futus from being stolen by malware infecting your computer.</source>
+        <translation type="vanished">你的钱包现在已被加密。请记住，对钱包进行加密仍然不能完全防止感染电脑的恶意软件偷取你的Futu。</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -230,11 +230,11 @@
         <translation>警告: 大写字母锁定已开启！</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FMLS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FUTUS&lt;/b&gt;!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your FMLs from being stolen by malware infecting your computer.</source>
+        <source>Your wallet is now encrypted. Remember that encrypting your wallet cannot fully protect your FUTUs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -352,8 +352,8 @@
         <translation>代理已被&lt;b&gt;启用&lt;/b&gt;：%1</translation>
     </message>
     <message>
-        <source>Send coins to a Fermat address</source>
-        <translation>向一个Fermat地址发送Fermat</translation>
+        <source>Send coins to a Futu address</source>
+        <translation>向一个Futu地址发送Futu</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -376,8 +376,8 @@
         <translation>验证消息(&amp;V)...</translation>
     </message>
     <message>
-        <source>Fermat</source>
-        <translation>Fermat</translation>
+        <source>Futu</source>
+        <translation>Futu</translation>
     </message>
     <message>
         <source>&amp;Send</source>
@@ -404,12 +404,12 @@
         <translation>对钱包中的私钥加密</translation>
     </message>
     <message>
-        <source>Sign messages with your Fermat addresses to prove you own them</source>
-        <translation>用Fermat地址关联的私钥为消息签名，以证明您拥有这个Fermat地址</translation>
+        <source>Sign messages with your Futu addresses to prove you own them</source>
+        <translation>用Futu地址关联的私钥为消息签名，以证明您拥有这个Futu地址</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Fermat addresses</source>
-        <translation>校验消息，确保该消息是由指定的Fermat地址所有者签名的</translation>
+        <source>Verify messages to ensure they were signed with specified Futu addresses</source>
+        <translation>校验消息，确保该消息是由指定的Futu地址所有者签名的</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -428,8 +428,8 @@
         <translation>分页工具栏</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and Fermat: URIs)</source>
-        <translation>请求支付 (生成二维码和 Fermat: URI)</translation>
+        <source>Request payments (generates QR codes and Futu: URIs)</source>
+        <translation>请求支付 (生成二维码和 Futu: URI)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -440,17 +440,17 @@
         <translation>显示用过的接收地址和标签的列表</translation>
     </message>
     <message>
-        <source>Open a Fermat: URI or payment request</source>
-        <translation>打开一个 Fermat: URI 或支付请求</translation>
+        <source>Open a Futu: URI or payment request</source>
+        <translation>打开一个 Futu: URI 或支付请求</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>命令行选项(&amp;C)</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Fermat network</source>
+        <source>%n active connection(s) to Futu network</source>
         <translation>
-            <numerusform>%n 条到Fermat网络的活动连接</numerusform>
+            <numerusform>%n 条到Futu网络的活动连接</numerusform>
         </translation>
     </message>
     <message>
@@ -520,7 +520,7 @@
         <translation>关闭钱包</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Fermat command-line options</source>
+        <source>Show the %1 help message to get a list with possible Futu command-line options</source>
         <translation>显示 %1 帮助信息，获取可用命令行选项列表</translation>
     </message>
     <message>
@@ -631,7 +631,7 @@
         <translation>钱包已被&lt;b&gt;加密&lt;/b&gt;，当前为&lt;b&gt;锁定&lt;/b&gt;状态</translation>
     </message>
     <message>
-        <source>A fatal error occurred. Fermat can no longer continue safely and will quit.</source>
+        <source>A fatal error occurred. Futu can no longer continue safely and will quit.</source>
         <translation>发生严重错误。客户端无法安全地继续运行，即将退出。</translation>
     </message>
     <message>
@@ -841,8 +841,8 @@
         <translation>编辑付款地址</translation>
     </message>
     <message>
-        <source>The entered address &quot;%1&quot; is not a valid Fermat address.</source>
-        <translation>输入的地址 %1 并不是有效的Fermat地址。</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Futu address.</source>
+        <translation>输入的地址 %1 并不是有效的Futu地址。</translation>
     </message>
     <message>
         <source>Address &quot;%1&quot; already exists as a receiving address with label &quot;%2&quot; and so cannot be added as a sending address.</source>
@@ -1105,8 +1105,8 @@
         <translation>使用自定义的数据目录：</translation>
     </message>
     <message>
-        <source>Fermat</source>
-        <translation>Fermat</translation>
+        <source>Futu</source>
+        <translation>Futu</translation>
     </message>
     <message>
         <source>At least %1 GB of data will be stored in this directory, and it will grow over time.</source>
@@ -1117,8 +1117,8 @@
         <translation>会在此目录中存储约 %1 GB 的数据。</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Fermat block chain.</source>
-        <translation>%1 将会下载并存储Fermat区块链。</translation>
+        <source>%1 will download and store a copy of the Futu block chain.</source>
+        <translation>%1 将会下载并存储Futu区块链。</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1167,11 +1167,11 @@
         <translation>表单</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Fermat network, as detailed below.</source>
-        <translation>近期交易可能尚未显示，因此当前余额可能不准确。以上信息将在与Fermat网络完全同步后更正。详情如下</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Futu network, as detailed below.</source>
+        <translation>近期交易可能尚未显示，因此当前余额可能不准确。以上信息将在与Futu网络完全同步后更正。详情如下</translation>
     </message>
     <message>
-        <source>Attempting to spend Fermats that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <source>Attempting to spend Futus that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
         <translation>尝试使用受未可见交易影响的余额将不被网络接受。</translation>
     </message>
     <message>
@@ -1353,8 +1353,8 @@
         <translation>动用尚未确认的找零资金(&amp;S)</translation>
     </message>
     <message>
-        <source>Automatically open the Fermat client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>自动在路由器中打开Fermat端口。只有当您的路由器开启了 UPnP 选项时此功能才有效。</translation>
+        <source>Automatically open the Futu client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>自动在路由器中打开Futu端口。只有当您的路由器开启了 UPnP 选项时此功能才有效。</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1369,8 +1369,8 @@
         <translation>允许流入连接(&amp;G)</translation>
     </message>
     <message>
-        <source>Connect to the Fermat network through a SOCKS5 proxy.</source>
-        <translation>通过 SOCKS5 代理连接Fermat网络。</translation>
+        <source>Connect to the Futu network through a SOCKS5 proxy.</source>
+        <translation>通过 SOCKS5 代理连接Futu网络。</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1405,8 +1405,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the Fermat network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>在 Tor 匿名网络下通过不同的 SOCKS5 代理连接Fermat网络</translation>
+        <source>Connect to the Futu network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>在 Tor 匿名网络下通过不同的 SOCKS5 代理连接Futu网络</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1438,11 +1438,11 @@
     </message>
     <message>
         <source>&amp;Unit to show amounts in:</source>
-        <translation>Fermat金额单位(&amp;U)：</translation>
+        <translation>Futu金额单位(&amp;U)：</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>选择Fermat单位。</translation>
+        <translation>选择Futu单位。</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -1516,8 +1516,8 @@
         <translation>表单</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Fermat network after a connection is established, but this process has not completed yet.</source>
-        <translation>现在显示的消息可能是过期的。在连接上Fermat网络节点后，您的钱包将自动与网络同步，但是这个过程还没有完成。</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Futu network after a connection is established, but this process has not completed yet.</source>
+        <translation>现在显示的消息可能是过期的。在连接上Futu网络节点后，您的钱包将自动与网络同步，但是这个过程还没有完成。</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1599,8 +1599,8 @@
         <translation>要求付款时发生错误</translation>
     </message>
     <message>
-        <source>Cannot start Fermat: click-to-pay handler</source>
-        <translation>无法启动 Fermat 协议的“一键支付”处理器</translation>
+        <source>Cannot start Futu: click-to-pay handler</source>
+        <translation>无法启动 Futu 协议的“一键支付”处理器</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -1627,8 +1627,8 @@
         <translation>无效的付款地址 %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Fermat address or malformed URI parameters.</source>
-        <translation>无法解析 URI 地址！可能是因为Fermat地址无效，或是 URI 参数格式错误。</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Futu address or malformed URI parameters.</source>
+        <translation>无法解析 URI 地址！可能是因为Futu地址无效，或是 URI 参数格式错误。</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1833,8 +1833,8 @@
         <translation>无法解锁钱包</translation>
     </message>
     <message>
-        <source>Make binding takes 10 FML, are you sure to continue?</source>
-        <translation>绑定算力需要10个FML, 确定要继续绑定吗?</translation>
+        <source>Make binding takes 10 FUTU, are you sure to continue?</source>
+        <translation>绑定算力需要10个FUTU, 确定要继续绑定吗?</translation>
     </message>
     <message>
         <source>Wallet doesn&apos;t have private key for address: &quot;%1&quot;</source>
@@ -1857,8 +1857,8 @@
         <translation>此PlotID没有任何算力绑定信息, 请不要浪费你的金钱!</translation>
     </message>
     <message>
-        <source>Unbinding takes 16 FML, are you sure to continue?</source>
-        <translation type="vanished">解绑算力需要16FML, 确定要继续吗?</translation>
+        <source>Unbinding takes 16 FUTU, are you sure to continue?</source>
+        <translation type="vanished">解绑算力需要16FUTU, 确定要继续吗?</translation>
     </message>
     <message>
         <source>Transaction &quot;%1&quot; was created for plot id unbinding</source>
@@ -1877,8 +1877,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unbinding takes 10 FML, are you sure to continue?</source>
-        <translation type="unfinished">解绑算力需要16FML, 确定要继续吗? {10 ?}</translation>
+        <source>Unbinding takes 10 FUTU, are you sure to continue?</source>
+        <translation type="unfinished">解绑算力需要16FUTU, 确定要继续吗? {10 ?}</translation>
     </message>
 </context>
 <context>
@@ -1888,8 +1888,8 @@
         <translation>金额</translation>
     </message>
     <message>
-        <source>Enter a Fermat address (e.g. %1)</source>
-        <translation>请输入一个Fermat地址 (例如 %1)</translation>
+        <source>Enter a Futu address (e.g. %1)</source>
+        <translation>请输入一个Futu地址 (例如 %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2356,8 +2356,8 @@
         <translation>消息(&amp;M)：</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Fermat network.</source>
-        <translation>可在付款请求上备注一条信息，在打开付款请求时可以看到。注意：该消息不是通过Fermat网络传送。</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Futu network.</source>
+        <translation>可在付款请求上备注一条信息，在打开付款请求时可以看到。注意：该消息不是通过Futu网络传送。</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2637,8 +2637,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>粉尘：</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for Fermat transactions than the network can process.</source>
-        <translation type="vanished">当交易量小于可用区块空间时，矿工和中继节点可能会执行最低手续费率限制。按照这个最低费率来支付手续费也是可以的，但请注意，一旦交易需求超出Fermat网络能处理的限度，你的交易可能永远也无法确认。</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for Futu transactions than the network can process.</source>
+        <translation type="vanished">当交易量小于可用区块空间时，矿工和中继节点可能会执行最低手续费率限制。按照这个最低费率来支付手续费也是可以的，但请注意，一旦交易需求超出Futu网络能处理的限度，你的交易可能永远也无法确认。</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2787,8 +2787,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         </translation>
     </message>
     <message>
-        <source>Warning: Invalid Fermat address</source>
-        <translation>警告: Fermat地址无效</translation>
+        <source>Warning: Invalid Futu address</source>
+        <translation>警告: Futu地址无效</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2807,8 +2807,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>(无标签)</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for fermat transactions than the network can process.</source>
-        <translation>当交易量小于可用区块空间时，矿工和中继节点可能会执行最低手续费率限制。按照这个最低费率来支付手续费也是可以的，但请注意，一旦交易需求超出Fermat网络能处理的限度，你的交易可能永远也无法确认。</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for futu transactions than the network can process.</source>
+        <translation>当交易量小于可用区块空间时，矿工和中继节点可能会执行最低手续费率限制。按照这个最低费率来支付手续费也是可以的，但请注意，一旦交易需求超出Futu网络能处理的限度，你的交易可能永远也无法确认。</translation>
     </message>
 </context>
 <context>
@@ -2834,7 +2834,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>这是笔正常的支付。</translation>
     </message>
     <message>
-        <source>The Fermat address to send the payment to</source>
+        <source>The Futu address to send the payment to</source>
         <translation>付款目的地址</translation>
     </message>
     <message>
@@ -2854,8 +2854,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>移除此项</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less Fermats than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>交易费将从发送总额中扣除。接收人将收到比您在金额框中输入的更少的Fermat。如果选中了多个收件人，交易费平分。</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less Futus than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>交易费将从发送总额中扣除。接收人将收到比您在金额框中输入的更少的Futu。如果选中了多个收件人，交易费平分。</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2882,8 +2882,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>请为此地址输入一个标签以将它加入用过的地址列表</translation>
     </message>
     <message>
-        <source>A message that was attached to the Fermat: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Fermat network.</source>
-        <translation>Fermat:URI 附带的备注信息，将会和交易一起存储，备查。 注意：该消息不会通过Fermat网络传输。</translation>
+        <source>A message that was attached to the Futu: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Futu network.</source>
+        <translation>Futu:URI 附带的备注信息，将会和交易一起存储，备查。 注意：该消息不会通过Futu网络传输。</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2927,11 +2927,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>签名消息(&amp;S)</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive Fermats sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>您可以用你的地址对消息/协议进行签名，以证明您可以接收发送到该地址的Fermat。注意不要对任何模棱两可或者随机的消息进行签名，以免遭受钓鱼式攻击。请确保消息内容准确的表达了您的真实意愿。</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive Futus sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>您可以用你的地址对消息/协议进行签名，以证明您可以接收发送到该地址的Futu。注意不要对任何模棱两可或者随机的消息进行签名，以免遭受钓鱼式攻击。请确保消息内容准确的表达了您的真实意愿。</translation>
     </message>
     <message>
-        <source>The Fermat address to sign the message with</source>
+        <source>The Futu address to sign the message with</source>
         <translation>用来对消息签名的地址 </translation>
     </message>
     <message>
@@ -2963,7 +2963,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>复制当前签名至剪切板</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Fermat address</source>
+        <source>Sign the message to prove you own this Futu address</source>
         <translation type="vanished">签名消息，证明这个地址属于您。</translation>
     </message>
     <message>
@@ -2987,12 +2987,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>请在下面输入接收者地址、消息（确保换行符、空格符、制表符等完全相同）和签名以验证消息。请仔细核对签名信息，以提防中间人攻击。请注意，这只是证明接收方签名的地址，它不能证明任何交易！</translation>
     </message>
     <message>
-        <source>The Fermat address the message was signed with</source>
+        <source>The Futu address the message was signed with</source>
         <translation type="vanished">消息使用的签名地址</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Fermat address</source>
-        <translation>验证消息，确保消息是由指定的Fermat地址签名过的。</translation>
+        <source>Verify the message to ensure it was signed with the specified Futu address</source>
+        <translation>验证消息，确保消息是由指定的Futu地址签名过的。</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3221,7 +3221,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     </message>
     <message>
         <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>新挖出的Fermat在可以使用前必须经过 %1 个区块确认的成熟过程。当您挖出此区块后，它将被广播到网络中以加入区块链。如果它未成功进入区块链，其状态将变更为“不接受”并且不可使用。这可能偶尔会发生，在另一个节点比你早几秒钟成功挖出一个区块时就会这样。</translation>
+        <translation>新挖出的Futu在可以使用前必须经过 %1 个区块确认的成熟过程。当您挖出此区块后，它将被广播到网络中以加入区块链。如果它未成功进入区块链，其状态将变更为“不接受”并且不可使用。这可能偶尔会发生，在另一个节点比你早几秒钟成功挖出一个区块时就会这样。</translation>
     </message>
     <message>
         <source>Debug information</source>
@@ -3673,8 +3673,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>无法启动HTTP服务，查看日志获取更多信息</translation>
     </message>
     <message>
-        <source>Fermat Core</source>
-        <translation>Fermat Core</translation>
+        <source>Futu Core</source>
+        <translation>Futu Core</translation>
     </message>
     <message>
         <source>The %s developers</source>

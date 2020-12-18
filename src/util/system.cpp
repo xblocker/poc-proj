@@ -73,7 +73,7 @@
 // Application startup time (used for uptime calculation)
 const int64_t nStartupTime = GetTime();
 
-const char * const BITCOIN_CONF_FILENAME = "fermat.conf";
+const char * const BITCOIN_CONF_FILENAME = "futu.conf";
 
 ArgsManager gArgs;
 
@@ -661,7 +661,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(nullptr, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "Fermat";
+    const char* pszModule = "Futu";
 #endif
     if (pex)
         return strprintf(
@@ -680,13 +680,13 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 fs::path GetDefaultDataDir()
 {
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Fermat
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Fermat
-    // Mac: ~/Library/Application Support/Fermat
-    // Unix: ~/.Fermat
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Futu
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Futu
+    // Mac: ~/Library/Application Support/Futu
+    // Unix: ~/.Futu
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Fermat";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Futu";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -696,10 +696,10 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/Fermat";
+    return pathRet / "Library/Application Support/Futu";
 #else
     // Unix
-    return pathRet / ".Fermat";
+    return pathRet / ".Futu";
 #endif
 #endif
 }
@@ -1208,8 +1208,8 @@ std::string CopyrightHolders(const std::string& strPrefix)
     std::string strCopyrightHolders = strPrefix + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
 
     // Check for untranslated substitution to make sure Bitcoin Core copyright is not removed by accident
-    if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION).find("Fermat Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The Fermat Core developers";
+    if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION).find("Futu Core") == std::string::npos) {
+        strCopyrightHolders += "\n" + strPrefix + "The Futu Core developers";
     }
     return strCopyrightHolders;
 }

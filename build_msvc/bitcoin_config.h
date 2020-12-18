@@ -23,10 +23,10 @@
 #define COPYRIGHT_HOLDERS "The %s developers"
 
 /* Copyright holder(s) */
-#define COPYRIGHT_HOLDERS_FINAL "The Fermat Core developers"
+#define COPYRIGHT_HOLDERS_FINAL "The Futu Core developers"
 
 /* Replacement for %s in copyright holders string */
-#define COPYRIGHT_HOLDERS_SUBSTITUTION "Fermat Core"
+#define COPYRIGHT_HOLDERS_SUBSTITUTION "Futu Core"
 
 /* Copyright year */
 #define COPYRIGHT_YEAR 2019
@@ -346,13 +346,13 @@
 #define PACKAGE_BUGREPORT "https://github.com/bitcoin/bitcoin/issues"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "Fermat Core"
+#define PACKAGE_NAME "Futu Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Fermat Core v0.1.3"
+#define PACKAGE_STRING "Futu Core v0.1.3"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "Fermat"
+#define PACKAGE_TARNAME "Futu"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL "https://bitcoincore.org/"

@@ -1,15 +1,15 @@
 *.tar.gz
 
 *.exe
-src/fermat
-src/fermatd
-src/fermat-cli
-src/fermat-tx
-src/fermat-wallet
-src/test/test_fermat
+src/futu
+src/futud
+src/futu-cli
+src/futu-tx
+src/futu-wallet
+src/test/test_futu
 src/test/test_bitcoin_fuzzy
-src/qt/fermat-qt
-src/qt/test/test_fermat-qt
+src/qt/futu-qt
+src/qt/test/test_futu-qt
 
 # autoreconf
 Makefile.in
@@ -47,14 +47,14 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/fermat-qt.cflags
-src/qt/fermat-qt.cxxflags
-src/qt/fermat-qt.config
-src/qt/fermat-qt.creator
-src/qt/fermat-qt.creator.user
-src/qt/fermat-qt.files
-src/qt/fermat-qt.includes
-src/qt/fermat-qt.pro.user
+src/qt/futu-qt.cflags
+src/qt/futu-qt.cxxflags
+src/qt/futu-qt.config
+src/qt/futu-qt.creator
+src/qt/futu-qt.creator.user
+src/qt/futu-qt.files
+src/qt/futu-qt.includes
+src/qt/futu-qt.pro.user
 
 .vscode
 .deps

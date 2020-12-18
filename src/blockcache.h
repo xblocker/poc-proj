@@ -1,9 +1,9 @@
-// Copyright (c) 2012-2019 The Fermat Core developers
+// Copyright (c) 2012-2019 The Futu Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef FERMAT_BLOCKCACHE_H
-#define FERMAT_BLOCKCACHE_H
+#ifndef FUTU_BLOCKCACHE_H
+#define FUTU_BLOCKCACHE_H
 
 #include <primitives/block.h>
 
@@ -29,4 +29,4 @@ private:
 };
 
 extern std::unique_ptr<CBlockCache> g_blockCache;
-#endif // FERMAT_BLOCKCACHE_H
+#endif // FUTU_BLOCKCACHE_H

@@ -1,5 +1,5 @@
-#ifndef FERMAT_ASSEMBER_H
-#define FERMAT_ASSEMBER_H
+#ifndef FUTU_ASSEMBER_H
+#define FUTU_ASSEMBER_H
 
 #include <config/bitcoin-config.h>
 #include <pubkey.h>

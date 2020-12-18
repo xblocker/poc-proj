@@ -13,7 +13,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.fermat.Fermat-Qt";
+        return @"org.futu.Futu-Qt";
     } else {
         return [self __bundleIdentifier];
     }

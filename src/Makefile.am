@@ -82,18 +82,18 @@ TESTS =
 BENCHMARKS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += fermatd
+  bin_PROGRAMS += futud
 endif
 
 if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += fermat
+  bin_PROGRAMS += futu
 endif
 if BUILD_BITCOIN_TX
-  bin_PROGRAMS += fermat-tx
+  bin_PROGRAMS += futu-tx
 endif
 if ENABLE_WALLET
 if BUILD_BITCOIN_WALLET
-  bin_PROGRAMS += fermat-wallet
+  bin_PROGRAMS += futu-wallet
 endif
 endif
 
@@ -499,16 +499,16 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind binary #
-fermatd_SOURCES = bitcoind.cpp
-fermatd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-fermatd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-fermatd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+futud_SOURCES = bitcoind.cpp
+futud_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+futud_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+futud_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-fermatd_SOURCES += bitcoind-res.rc
+futud_SOURCES += bitcoind-res.rc
 endif
 
-fermatd_LDADD = \
+futud_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_SERVER) \
@@ -523,38 +523,38 @@ fermatd_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-fermatd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+futud_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
 
 # bitcoin-cli binary #
-fermat_SOURCES = bitcoin-cli.cpp
-fermat_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-fermat_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-fermat_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+futu_SOURCES = bitcoin-cli.cpp
+futu_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+futu_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+futu_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-fermat_SOURCES += bitcoin-cli-res.rc
+futu_SOURCES += bitcoin-cli-res.rc
 endif
 
-fermat_LDADD = \
+futu_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
 
-fermat_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
+futu_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
 #
 
-# fermat-tx binary #
-fermat_tx_SOURCES = bitcoin-tx.cpp
-fermat_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-fermat_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-fermat_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# futu-tx binary #
+futu_tx_SOURCES = bitcoin-tx.cpp
+futu_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+futu_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+futu_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-fermat_tx_SOURCES += bitcoin-tx-res.rc
+futu_tx_SOURCES += bitcoin-tx-res.rc
 endif
 
-fermat_tx_LDADD = \
+futu_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -566,20 +566,20 @@ fermat_tx_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-fermat_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
+futu_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
 
-# fermat-wallet binary #
-fermat_wallet_SOURCES = bitcoin-wallet.cpp
-fermat_wallet_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-fermat_wallet_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-fermat_wallet_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# futu-wallet binary #
+futu_wallet_SOURCES = bitcoin-wallet.cpp
+futu_wallet_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+futu_wallet_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+futu_wallet_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-fermat_wallet_SOURCES += bitcoin-wallet-res.rc
+futu_wallet_SOURCES += bitcoin-wallet-res.rc
 endif
 
-fermat_wallet_LDADD = \
+futu_wallet_LDADD = \
   $(LIBBITCOIN_WALLET_TOOL) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_SERVER) \
@@ -592,7 +592,7 @@ fermat_wallet_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-fermat_wallet_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+futu_wallet_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
 #
 
 # bitcoinconsensus library #
