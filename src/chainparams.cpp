@@ -134,10 +134,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds = {
-            "hk.futu.io",
-            "tk.futu.io",
-            "so.futu.io",
-            "sp.futu.io",
+            "seed1.future.io",
         };
 
         // nodes with support for servicebits filtering should be at the top
